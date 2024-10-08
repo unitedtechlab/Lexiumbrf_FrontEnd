@@ -30,7 +30,6 @@ const SignUpPage: React.FC = () => {
     try {
       setLoading(true);
 
-      // Sending request to backend signup API with updated JSON structure
       const response = await axios.post(
         `${BaseURL}/users/signup`,
         {
@@ -49,12 +48,10 @@ const SignUpPage: React.FC = () => {
       setLoading(false);
 
       if (response.status === 200) {
-        // Handle success
         message.success("Signup successful. Please check your email for the OTP.");
-        setEmail(values.email); // Set email in context
-        router.push("/otp"); // Redirect to OTP verification page
+        setEmail(values.email);
+        router.push("/otp");
       } else {
-        // Handle any errors from the API
         message.error(response.data.error || "Signup failed. Please try again.");
       }
     } catch (error) {
@@ -86,13 +83,13 @@ const SignUpPage: React.FC = () => {
           <Col md={12} sm={24}>
             <Content
               heading="See your data. Clearly."
-              description="Unleash the power of your data. Bird Eye simplifies analysis, automates reports, and delivers clear insights to empower informed decisions."
+              description="Unleash the power of your data. Lexium Brf simplifies analysis, automates reports, and delivers clear insights to empower informed decisions."
             />
           </Col>
           <Col md={12} sm={24}>
             <div className={classes.loginForm}>
               <div className={classes.formHeading}>
-                <span className={classes.head}>Bird eye</span>
+                <span className={classes.head}>Lexium Brf</span>
                 <h5>Get Started Now</h5>
                 <p>Sign up for free to access any of our products</p>
               </div>
@@ -203,7 +200,7 @@ const SignUpPage: React.FC = () => {
                         className="btn full-width"
                         loading={loading}
                       >
-                        Start Free Trial
+                        Sign Up
                       </Button>
                     </Form.Item>
                     <Form.Item className="mb-0">
