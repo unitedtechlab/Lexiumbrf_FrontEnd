@@ -136,7 +136,19 @@ aside.ant-layout-sider.ant-layout-sider-collapsed .lightDarkmode {
 aside.ant-layout-sider.ant-layout-sider-collapsed .menuSider {
     height: calc(100vh - 185px);
 }
+.headerMain{
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+}
+.workspaceName{
+    font-family: Inter;
+font-size: 24px;
+font-weight: 700;
+line-height: 28px;
+text-align: left;
 
+}
 .nav_dropdown {
     font-size: var(--body-font);
     color: var(--black-color);

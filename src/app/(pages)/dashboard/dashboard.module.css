@@ -20,7 +20,7 @@
 .dashboardWrapper {
     height: 100%;
 } */
- .welcomeWrapper {
+.welcomeWrapper {
     max-width: 550px;
     margin: 0 auto;
     text-align: center;
@@ -68,3 +68,70 @@
     justify-content: space-between;
     gap: 10px;
 }
+
+.btnGreen {
+    background-color: var(--green-color);
+    border-radius: 4px;
+    padding: 8px 12px;
+    color: var(--white-color);
+    font-weight: var(--font-weight-600);
+    border: 1px solid var(--green-color);
+    height: auto;
+    line-height: initial;
+    font-family: var(--Poppins-family);
+    font-size: var(--font-sm);
+    letter-spacing: 1px;
+    transition: all 0.25s linear;
+}
+
+.btnGreen:hover {
+    border: 1px solid var(--green-color) !important;
+    color: var(--green-color) !important;
+    background: var(--white-color);
+}
+/* //Create Workspace modal css here */
+.modalTitle {
+    text-align: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.modalTitle h3 {
+    font-family: var(--Inter-family);
+    font-size: var( --h5-font);
+    font-weight: var(--font-weight-600);
+    line-height: 28px;
+    text-align: center;
+}
+
+.modalTitle h5 {
+    font-family: var(--Inter-family);
+    font-size: var(--font-xs);
+    font-weight: var(--font-weight-400);
+    line-height: 20px;
+    text-align: center;
+    color: var(--tertiary-100);
+
+}
+.btnCancel {
+    padding: 11px 16px;
+    background: var(--secondary-100);
+    color: var(--white-color);
+    font-weight: var(--font-weight-600);
+    font-family: var(--Poppins-family);
+    font-size: var(--font-sm);
+    border: 1px solid var(--secondary-100);
+    border-radius: 4px;
+    transition: all 0.35 linear;
+    -webkit-transition: all 0.35 linear;
+    height: auto;
+    line-height: 1.1;
+    cursor: pointer;
+  }
+  
+  .btnCancel:hover {
+    background: var(--white-color) !important;
+    border-color: var(--primary-100) !important;
+    color: var(--secondary-100) !important;
+  }
