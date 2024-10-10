@@ -20,28 +20,14 @@ type SidebarMenuProps = {
     onCollapse: () => void;
 };
 
-// type Theme = 'light' | 'dark';
-
-// const isValidTheme = (theme: string): theme is Theme => {
-//     return theme === 'light' || theme === 'dark';
-// };
-
 const SidebarMenu = ({ collapsed, onCollapse }: SidebarMenuProps) => {
-    // const { theme, setTheme } = useTheme();
     const [selectedKeys, setSelectedKeys] = useState<string[]>(['1']);
-
-    // useEffect(() => {
-    //     const storedTheme = localStorage.getItem('theme');
-    //     if (storedTheme && isValidTheme(storedTheme)) {
-    //         setTheme(storedTheme);
-    //     }
-    // }, [setTheme]);
 
     const sidebarItems = [
         {
             key: '1',
             icon: <RiDashboard2Fill />,
-            label: <Link href="/dashboard">Workspace</Link>,
+            label: <Link href="/workspace">Workspace</Link>,
         },
         {
             key: '2',
@@ -64,10 +50,6 @@ const SidebarMenu = ({ collapsed, onCollapse }: SidebarMenuProps) => {
         setSelectedKeys([key]);
     };
 
-    // const handleThemeChange = (newTheme: Theme) => {
-    //     setTheme(newTheme);
-    //     localStorage.setItem('theme', newTheme);
-    // };
 
     return (
         <Sider trigger={null} collapsible collapsed={collapsed} className={sidebarStyles.sidebarMain} theme="light" width={280}>
@@ -80,21 +62,11 @@ const SidebarMenu = ({ collapsed, onCollapse }: SidebarMenuProps) => {
                 className="menuSider"
                 theme="light"
                 mode="inline"
-                defaultSelectedKeys={['1']}
+                // defaultSelectedKeys={['1']}
                 selectedKeys={selectedKeys}
                 items={sidebarItems}
                 onClick={({ key }) => handleMenuClick(key)}
             />
-            {/* <div className={sidebarStyles.lightDarkWrapper}>
-                <div className={`${sidebarStyles.lightDarkmode} lightDarkmode`}>
-                    <Button className={`${sidebarStyles.lightdarkBTN} lightdarkBTN ${theme === 'light' ? sidebarStyles.active : ''}`} onClick={() => handleThemeChange('light')} disabled={theme === 'light'}>
-                        <BiSun />Light
-                    </Button>
-                    <Button className={`${sidebarStyles.lightdarkBTN} lightdarkBTN ${theme === 'dark' ? sidebarStyles.active : ''}`} onClick={() => handleThemeChange('dark')} disabled={theme === 'dark'}>
-                        <BiMoon />Dark
-                    </Button>
-                </div>
-            </div> */}
         </Sider>
     );
 };
