@@ -15,7 +15,7 @@ export default function ForgotPassword() {
   const handleRequestPasswordReset = async (values: { email: string }) => {
     try {
       setLoading(true);
-      const response = await axios.post(`${BaseURL}/users/forgot-password`, {
+      const response = await axios.post(`${BaseURL}/users/recover-password`, {
         email: values.email,
       });
 

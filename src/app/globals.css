@@ -86,27 +86,29 @@
 
 /* ======= antd sidebar override css ========= */
 .menuSider {
-    padding: 24px;
-    height: calc(100vh - 162px);
+    padding: 15px;
+    height: calc(100vh - 72px);
     overflow-y: auto;
+    border: 0 !important;
 }
 
 ul.ant-menu.menuSider li.ant-menu-item {
     margin: 0;
-    padding: 10px 12px !important;
+    padding: 10px 10px !important;
     height: auto;
     line-height: initial;
     color: var(--tertiary-100);
     font-weight: var(--font-weight-500);
     font-family: var(--Inter-family);
-    font-size: var(--base-font);
+    font-size: var(--font-xs);
     margin-bottom: 8px;
     border-radius: 8px;
 }
 
-ul.ant-menu.menuSider li.ant-menu-item.ant-menu-item-selected {
-    background: var(--tertiary-200) !important;
-    color: var(--black-color);
+ul.ant-menu.menuSider li.ant-menu-item.ant-menu-item-selected,
+ul.ant-menu.menuSider li.ant-menu-item:hover {
+    background: var(--new-primary-200) !important;
+    color: var(--new-primary-100) !important;
 }
 
 ul.ant-menu.menuSider li.ant-menu-item svg {

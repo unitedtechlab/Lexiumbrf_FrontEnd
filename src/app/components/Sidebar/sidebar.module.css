@@ -1,10 +1,10 @@
 .logo {
-    padding: 24px;
+    padding: 20px 15px;
     height: 72px;
 }
 
 .sidebarMain {
-    border-right: 1px solid var(--tertiary-300);
+    border-right: 1px dashed var(--tertiary-300);
 }
 
 .lightDarkWrapper {

@@ -1,13 +1,18 @@
 .header {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
     gap: 10px;
     background: var(--white-color);
     border-bottom: 1px solid var(--tertiary-300);
     padding: 15px 28px;
     line-height: initial;
     height: 70px;
+    background: var(--new-secondary-100);
+}
+
+.header h6 {
+    margin: 0;
 }
 
 .bodylayout {

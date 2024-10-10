@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 const HomePage: React.FC = () => {
-    redirect('/signin');
+    redirect('/dashboard');
     return (
         <div>
             <h1>Welcome to the Home Page</h1>

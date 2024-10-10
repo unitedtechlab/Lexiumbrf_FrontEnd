@@ -1,4 +1,3 @@
-// Use client-side for interactive parts (useState, useEffect, etc.)
 "use client";
 
 import { Layout } from 'antd';
@@ -37,6 +36,7 @@ export default function CustomLayout({ children }: LayoutProps) {
                     <div className={`${classes.hemBurger} flex`}>
                         {ToggleButton}
                     </div>
+                    <h6>Workspace</h6>
                     {MemoizedHeaderMain}
                 </Header>
                 <Content className={classes.bodylayout}>

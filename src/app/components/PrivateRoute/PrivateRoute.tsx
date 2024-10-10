@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getToken, setToken, isValidToken, removeToken, decodeToken, isBrowser } from '@/utils/auth';
 import { useEmail } from '@/app/context/emailContext';
-import PasswordModal from '@/app/modals/new-password/newpassword';
 
 interface PrivateRouteProps {
     children: React.ReactNode;
@@ -14,7 +13,6 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
     const router = useRouter();
     const { setEmail, setFirstName, setLastName } = useEmail();
     const [isTokenValid, setIsTokenValid] = useState(true);
-    const [showPasswordModal, setShowPasswordModal] = useState(false);
 
     useEffect(() => {
         const fetchTokenAndRedirect = async () => {
@@ -22,7 +20,6 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
 
             const urlParams = new URLSearchParams(window.location.search);
             const queryToken = urlParams.get('token');
-            const showModal = urlParams.get('showModal');
 
             if (queryToken) {
                 setToken(queryToken);
@@ -31,10 +28,6 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
                     setEmail(decodedToken.email);
                     setFirstName(decodedToken.firstName);
                     setLastName(decodedToken.lastName);
-                }
-
-                if (showModal === "true") {
-                    setShowPasswordModal(true);
                 }
                 return;
             }
@@ -58,9 +51,6 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
                 setEmail(decodedToken.email);
                 setFirstName(decodedToken.firstName);
                 setLastName(decodedToken.lastName);
-                if (showModal === "true") {
-                    setShowPasswordModal(true);
-                }
             }
         };
 
@@ -80,30 +70,11 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
         return () => clearTimeout(timeout);
     }, [router, setEmail, setFirstName, setLastName]);
 
-    const handleModalCancel = () => {
-        setShowPasswordModal(false);
-        if (isBrowser()) {
-            localStorage.setItem('dismissedPasswordModal', 'true');
-        }
-    };
-
-    const handlePasswordChangeSuccess = () => {
-        setShowPasswordModal(false);
-        if (isBrowser()) {
-            localStorage.setItem('dismissedPasswordModal', 'true');
-        }
-    };
-
     if (!isTokenValid) return null;
 
     return (
         <>
             {children}
-            <PasswordModal
-                open={showPasswordModal}
-                onCancel={handleModalCancel}
-                onSuccess={handlePasswordChangeSuccess}
-            />
         </>
     );
 };

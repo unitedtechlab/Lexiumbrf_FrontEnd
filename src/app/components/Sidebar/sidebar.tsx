@@ -6,9 +6,12 @@ import Image from 'next/image';
 import Logo from '@/app/assets/images/logo.png';
 import CollapsedLogo from '@/app/assets/images/logo-collapsed.svg';
 import sidebarStyles from './sidebar.module.css';
-import { useTheme } from '../../context/ThemeContext';
+// import { useTheme } from '../../context/ThemeContext';
 import Link from 'next/link';
-import { BiSun, BiMoon, BiHomeAlt, BiGridAlt, BiData, BiGitBranch } from "react-icons/bi";
+import { BiGitBranch } from "react-icons/bi";
+import { FaFileLines } from "react-icons/fa6";
+import { RiDashboard2Fill } from "react-icons/ri";
+import { BiSolidPlaneTakeOff } from "react-icons/bi";
 
 const { Sider } = Layout;
 
@@ -17,43 +20,43 @@ type SidebarMenuProps = {
     onCollapse: () => void;
 };
 
-type Theme = 'light' | 'dark';
+// type Theme = 'light' | 'dark';
 
-const isValidTheme = (theme: string): theme is Theme => {
-    return theme === 'light' || theme === 'dark';
-};
+// const isValidTheme = (theme: string): theme is Theme => {
+//     return theme === 'light' || theme === 'dark';
+// };
 
 const SidebarMenu = ({ collapsed, onCollapse }: SidebarMenuProps) => {
-    const { theme, setTheme } = useTheme();
+    // const { theme, setTheme } = useTheme();
     const [selectedKeys, setSelectedKeys] = useState<string[]>(['1']);
 
-    useEffect(() => {
-        const storedTheme = localStorage.getItem('theme');
-        if (storedTheme && isValidTheme(storedTheme)) {
-            setTheme(storedTheme);
-        }
-    }, [setTheme]);
+    // useEffect(() => {
+    //     const storedTheme = localStorage.getItem('theme');
+    //     if (storedTheme && isValidTheme(storedTheme)) {
+    //         setTheme(storedTheme);
+    //     }
+    // }, [setTheme]);
 
     const sidebarItems = [
         {
             key: '1',
-            icon: <BiHomeAlt />,
-            label: <Link href="/dashboard">Dashboard</Link>,
+            icon: <RiDashboard2Fill />,
+            label: <Link href="/dashboard">Workspace</Link>,
         },
         {
             key: '2',
-            icon: <BiGridAlt />,
-            label: <Link href="/create-workspace">File Management</Link>,
+            icon: <FaFileLines />,
+            label: <Link href="/create-workspace">Dashboard & Visualization</Link>,
         },
         {
             key: '4',
-            icon: <BiData />,
-            label: <Link href="/data-storage">Storage</Link>,
+            icon: <BiSolidPlaneTakeOff />,
+            label: <Link href="/data-storage">Workflows & Rules</Link>,
         },
         {
             key: '5',
             icon: <BiGitBranch />,
-            label: <Link href="/workflows-list">Workflow</Link>,
+            label: <Link href="/workflows-list">Rules Management</Link>,
         },
     ];
 
@@ -61,16 +64,16 @@ const SidebarMenu = ({ collapsed, onCollapse }: SidebarMenuProps) => {
         setSelectedKeys([key]);
     };
 
-    const handleThemeChange = (newTheme: Theme) => {
-        setTheme(newTheme);
-        localStorage.setItem('theme', newTheme);
-    };
+    // const handleThemeChange = (newTheme: Theme) => {
+    //     setTheme(newTheme);
+    //     localStorage.setItem('theme', newTheme);
+    // };
 
     return (
-        <Sider trigger={null} collapsible collapsed={collapsed} className={sidebarStyles.sidebarMain} theme="light" width={260}>
+        <Sider trigger={null} collapsible collapsed={collapsed} className={sidebarStyles.sidebarMain} theme="light" width={280}>
             <div className={sidebarStyles.logo}>
                 <Link href="/dashboard">
-                    <Image src={collapsed ? CollapsedLogo : Logo} alt='logo image' width={collapsed ? 50 : 170} priority />
+                    <Image src={collapsed ? CollapsedLogo : Logo} alt='logo image' width={collapsed ? 50 : 220} priority />
                 </Link>
             </div>
             <Menu
@@ -82,7 +85,7 @@ const SidebarMenu = ({ collapsed, onCollapse }: SidebarMenuProps) => {
                 items={sidebarItems}
                 onClick={({ key }) => handleMenuClick(key)}
             />
-            <div className={sidebarStyles.lightDarkWrapper}>
+            {/* <div className={sidebarStyles.lightDarkWrapper}>
                 <div className={`${sidebarStyles.lightDarkmode} lightDarkmode`}>
                     <Button className={`${sidebarStyles.lightdarkBTN} lightdarkBTN ${theme === 'light' ? sidebarStyles.active : ''}`} onClick={() => handleThemeChange('light')} disabled={theme === 'light'}>
                         <BiSun />Light
@@ -91,7 +94,7 @@ const SidebarMenu = ({ collapsed, onCollapse }: SidebarMenuProps) => {
                         <BiMoon />Dark
                     </Button>
                 </div>
-            </div>
+            </div> */}
         </Sider>
     );
 };

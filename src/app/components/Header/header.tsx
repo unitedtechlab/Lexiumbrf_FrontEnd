@@ -10,6 +10,11 @@ import userImage from "@/app/assets/images/user.png";
 import { useRouter } from "next/navigation";
 import { useEmail } from "@/app/context/emailContext";
 import { removeToken } from "@/utils/auth";
+import { VscSettings } from "react-icons/vsc";
+import { MdOutlineQuestionMark } from "react-icons/md";
+import { FaUsersCog } from "react-icons/fa";
+import { FaArrowTurnUp } from "react-icons/fa6";
+import { BiLogOut } from "react-icons/bi";
 
 const Header: React.FC = () => {
   const router = useRouter();
@@ -37,15 +42,27 @@ const Header: React.FC = () => {
 
   const items = useMemo((): MenuProps['items'] => [
     {
-      label: <Link href="/profile">Profile</Link>,
+      label: <Link href="/"><VscSettings /> Profile Settings</Link>,
       key: "0",
+    },
+    {
+      label: <Link href="/"><MdOutlineQuestionMark /> Account Settings</Link>,
+      key: "1",
+    },
+    {
+      label: <Link href="/"><FaUsersCog /> User Settings</Link>,
+      key: "2",
+    },
+    {
+      label: <Link href="/"><FaArrowTurnUp /> Workspace</Link>,
+      key: "3",
     },
     {
       type: "divider",
     },
     {
-      label: <a onClick={handleLogout}>Logout</a>,
-      key: "1",
+      label: <a onClick={handleLogout}><BiLogOut /> Logout</a>,
+      key: "4",
     },
   ], []);
 

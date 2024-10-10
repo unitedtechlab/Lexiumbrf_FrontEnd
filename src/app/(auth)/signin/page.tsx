@@ -17,7 +17,7 @@ import axios from "axios";
 interface SignInFormValues {
   email: string;
   password: string;
-  remember?: boolean; // Updated to boolean for checkbox
+  remember?: boolean;
 }
 
 export default function SignIn() {
@@ -43,19 +43,27 @@ export default function SignIn() {
       );
 
       setLoading(false);
-      if (response.status === 200) {
+
+      // Check if the request was successful
+      if (response.data.success) {
         const { token, message: successMessage } = response.data.data;
         message.success(successMessage || "Signin successful.");
-        setToken(token); // Store token
-        setEmail(values.email); // Set email in context
-        router.push("/dashboard"); // Redirect to dashboard
+        setToken(token);
+        setEmail(values.email);
+        router.push("/dashboard");
       } else {
-        message.error(response.data.error || "Signin failed. Please try again.");
+        // Display the error message from the backend
+        const errorMessage = response.data.error?.message || "Signin failed. Please try again.";
+        message.error(errorMessage);
       }
     } catch (error) {
       setLoading(false);
+      // Enhanced error handling to capture backend error messages
       if (axios.isAxiosError(error) && error.response) {
-        const errorMessage = error.response.data.error || "Invalid email or password";
+        const { data } = error.response;
+
+        // Extract and display the error message
+        const errorMessage = data.error?.message || "Invalid email or password";
         message.error(errorMessage);
       } else {
         message.error("An error occurred. Please try again.");

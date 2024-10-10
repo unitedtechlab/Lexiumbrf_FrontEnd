@@ -26,6 +26,11 @@ body.light {
 
   --error-color: #ff4d4f;
 
+  --new-primary-100: #00A76F;
+  --new-primary-200: #00A76F14;
+
+  --new-secondary-100: #F7F9FC;
+
 }
 
 body.dark {

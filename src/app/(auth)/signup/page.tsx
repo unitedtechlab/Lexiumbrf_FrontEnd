@@ -47,18 +47,20 @@ const SignUpPage: React.FC = () => {
 
       setLoading(false);
 
-      if (response.status === 200) {
+      if (response.data.success) {
         message.success("Signup successful. Please check your email for the OTP.");
         setEmail(values.email);
         router.push("/otp");
       } else {
-        message.error(response.data.error || "Signup failed. Please try again.");
+        const errorMessage = response.data.error?.message || "Signup failed. Please try again.";
+        message.error(errorMessage);
       }
     } catch (error) {
       setLoading(false);
+
       if (axios.isAxiosError(error) && error.response) {
-        const errorMessage =
-          error.response.data.error || "An error occurred during signup. Please try again.";
+        const { data } = error.response;
+        const errorMessage = data.error?.message || "An unexpected error occurred. Please try again.";
         message.error(errorMessage);
       } else {
         message.error("An error occurred. Please try again.");
