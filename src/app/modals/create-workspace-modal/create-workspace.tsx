@@ -2,7 +2,8 @@ import { Button, Modal, Input, Select, Avatar } from "antd";
 import { useState } from "react";
 import dashbaord from "@/app/(pages)/dashboard/dashboard.module.css";
 import userImage from "@/app/assets/images/user.png";
-// import classes from './createworkspace.module.css';
+import classes from './createworkspace.module.css';
+//
 interface CreateWorkspaceProps {
     isModalOpen: boolean;
     setIsModalOpen: (isOpen: boolean) => void;
@@ -13,9 +14,9 @@ interface CreateWorkspaceProps {
 const { Option } = Select;
 
 const users = [
-    { id: 1, name: 'Candice Wu', username: '@candice', role: 'Admin', avatar: 'path/to/avatar1' },
-    { id: 2, name: 'Demi Wilkinson', username: '@demi', role: 'User', avatar: 'path/to/avatar2' },
-    { id: 3, name: 'Drew Cano', username: '@drew', role: 'User', avatar: 'path/to/avatar3' },
+    { id: 1, name: 'Candice Wu', username: '@candice', role: 'Admin', avatar: 'img/avatar1' },
+    { id: 2, name: 'Demi Wilkinson', username: '@demi', role: 'User', avatar: 'img/avatar2' },
+    { id: 3, name: 'Drew Cano', username: '@drew', role: 'User', avatar: 'img/avatar3' },
 ];
 
 const CreateWorkspace: React.FC<CreateWorkspaceProps> = ({ isModalOpen, setIsModalOpen, workSpace, onSave }) => {
