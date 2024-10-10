@@ -618,3 +618,10 @@ span.ant-select-selection-placeholder {
     left: 0;
     transform: translateY(-50%);
 }
+
+
+/* ================================= new css start here ======================= */
+.custom_form .ant-form-item-control-input-content .ant-input-outlined,
+.custom_form .ant-form-item-control-input-content .ant-select-selector {
+    border-color: var(--tertiary-300) !important;
+}
