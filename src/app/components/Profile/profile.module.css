@@ -1,0 +1,118 @@
+.profileModal {
+    display: flex;
+    justify-content: flex-end;
+    background-color: #f9f6ff;
+    padding: 20px;
+}
+
+.modalContent {
+    background-color: white;
+    width: 50%;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.profileHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.customDivider {
+    width: 100%;
+    height: 1px;
+    background-color: #e8e8e8;
+    margin: 16px 0;
+}
+
+.modalFooter {
+    text-align: right;
+}
+
+.profileInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.profileHeader h3 {
+    font-size: 1.75rem;
+    margin: 0 10px;
+}
+
+.profileHeader p {
+    color: grey;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+.generalTab,
+.securityTab {
+    margin-top: 20px;
+}
+
+.name_fields {
+    display: flex;
+    gap: 15px;
+}
+.profileImage {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    /* justify-content: space-between; */
+    gap: 5px;
+}
+.profileImage img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+}
+
+.profileImage button {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-family: var(--Inter-family);
+    font-size: 14px;
+    font-weight: var(--font-weight-500);
+    color: #167FFC;
+    transform: none;
+}
+
+.modalFooter {
+    text-align: right;
+    margin-top: 30px;
+}
+
+.doneBtn {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.doneBtn:hover {
+    background-color: #218838;
+}
+
+.profileImgReplace {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    font-size: 0.95rem;
+}
+
+.profileImgReplace {
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.profileImgReplace:hover {
+    color: #0056b3;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+}

@@ -1,0 +1,105 @@
+.heading {
+    font-family: Source Code Pro;
+    font-size: 16px;
+    font-weight: var(--font-weight-500);
+    line-height: 20.11px;
+}
+
+.card {
+    display: inline-flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.para {
+    font-family: Source Code Pro;
+    font-size: 12px;
+    font-weight: var(--font-weight-400);
+    line-height: 15.08px;
+}
+
+.pricepermonth h5 {
+    font-family: Source Code Pro;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 22.63px;
+    margin-bottom: 0rem;
+}
+
+.month {
+    font-family: Source Code Pro;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 17.6px;
+    color: var(--tertiary-600);
+}
+
+.currentplanbtn {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 5px;
+    align-items: center;
+}
+
+.CardWrapper .ant-card .ant-card-body {
+    padding: 19px;
+    border-radius: 0 0 8px 8px;
+}
+
+.downloadbtn {
+    font-family: var(--Poppins-family);
+    font-size: 12px;
+    font-weight: var(--font-weight-400);
+    line-height: 18px;
+    color: #340055;
+    border: 1px solid #340055;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+/* .downloadbtn :hover {
+    background-color: #340055;
+    color: #fff;
+    transition: all 0.3s ease;
+} */
+/* .noBottomBorder .ant-card-head {
+    border-bottom: none; /* Removes the line below the title */
+
+.noBottomBorder.ant-card .ant-card-head {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    min-height: 56px;
+    margin-bottom: -1px;
+    padding: 0 24px;
+    color: rgba(0, 0, 0, 0.88);
+    font-weight: 600;
+    font-size: 16px;
+    background: transparent;
+    /* border-bottom: 1px solid #f0f0f0; */
+    border-radius: 8px 8px 0 0;
+}
+
+.cardContainer {
+    font-family: var(--Inter-family);
+    font-size: 18px;
+    font-weight: var(--font-weight-600);
+    line-height: 28px;
+    text-align: left;
+}
+
+.cardContainer h6 {
+    font-family: var(--Inter-family);
+    font-size: 14px;
+    font-weight: var(--font-weight-400);
+    line-height: 20px;
+    text-align: left;
+}

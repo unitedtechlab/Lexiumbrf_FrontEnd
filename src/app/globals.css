@@ -171,6 +171,70 @@ aside.ant-layout-sider.ant-layout-sider-collapsed .menuSider {
     color: var(--tertiary-100);
 }
 
+.ant-dropdown-menu-item {
+    padding: 8px 16px !important;
+}
+
+/* .nav_dropdown {
+    width: 300px;
+} */
+
+.account-switch {
+    margin-top: 10px;
+}
+
+.account-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 27px;
+    margin-top: 5%;
+}
+
+.account-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+:where(.css-dev-only-do-not-override-zg0ahe).ant-avatar-sm {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.account-name-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.account-name-wrapper h4 {
+    font-family: var(--Inter-family);
+    font-size: 18px;
+    font-weight: var(--font-weight-500);
+    line-height: 21.78px;
+    margin-bottom: 0rem;
+}
+
+.account-name-wrapper h6 {
+    font-family: var(--Inter-family);
+    font-size: 12px;
+    font-weight: var(--font-weight-400);
+    line-height: 18px;
+    margin-bottom: 0rem;
+}
+
+.switch-account-title {
+    font-family: var(--Inter-family);
+    font-size: 12px;
+    font-weight: var(--font-weight-500);
+    line-height: 14.52px;
+    letter-spacing: -0.01em;
+    text-align: left;
+    color: var(--tertiary-100);
+}
+
 /* import data form css */
 .ant-form-item-control-input-content .forminput {
     border: 1px solid var(--tertiary-500);
@@ -624,4 +688,34 @@ span.ant-select-selection-placeholder {
 .custom_form .ant-form-item-control-input-content .ant-input-outlined,
 .custom_form .ant-form-item-control-input-content .ant-select-selector {
     border-color: var(--tertiary-300) !important;
+}
+
+.ant-table-content table thead.ant-table-thead th.ant-table-cell {
+    background: none;
+}
+
+.Table .ant-table-wrapper .ant-table-thead>tr>th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before,
+:where(.css-dev-only-do-not-override-zg0ahe).ant-table-wrapper .ant-table-thead>tr>td:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
+    position: absolute;
+    top: 50%;
+    /* inset-inline-end: 0; */
+    /* width: 1px; */
+    /* height: 1.6em; */
+    background-color: #f0f0f0;
+    transform: translateY(-50%);
+    transition: background-color 0.2s;
+    content: "";
+}
+
+/* .ant-radio-wrapper span.ant-radio+* {
+    padding-inline-start: 8px;
+    padding-inline-end: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+} */
+.CardWrapper .ant-card .ant-card-body {
+    padding: 24px;
+    border-radius: 0 0 8px 8px;
 }
