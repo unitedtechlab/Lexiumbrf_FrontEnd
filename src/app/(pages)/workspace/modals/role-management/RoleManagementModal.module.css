@@ -1,0 +1,8 @@
+.roleManagementTable {
+    margin-top: 20px;
+}
+
+.roleManagementTable .ant-checkbox-wrapper {
+    display: flex;
+    justify-content: center;
+}

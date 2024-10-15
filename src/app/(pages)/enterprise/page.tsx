@@ -1,31 +1,46 @@
 "use client";
 
-import React, { useState } from 'react';
-import styles from './workspace.module.css';
+import React, { useEffect, useState } from 'react';
+import styles from '../workspace/workspace.module.css';
 import Searchbar from '@/app/components/Searchbar/search';
-import { Button, Dropdown } from 'antd';
+import { Button, Dropdown, message } from 'antd';
 import Image from "next/image";
 import User1 from '@/app/assets/images/user.jpg';
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
-import CreateWorkspace from "@/app/modals/create-workspace/create-workspace";
-import RoleManagementModal from './modals/role-management/RoleManagementModal';
+import { BaseURL } from "@/app/constants/index";
+import axios from "axios";
 
-function Workspaces() {
+function EnterprisePage() {
     const [searchInput, setSearchInput] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
+    const [enterpriseData, setEnterpriseData] = useState<any[]>([]);  // Store enterprise data
+    const [loading, setLoading] = useState<boolean>(false);  // Loading state
+
+    useEffect(() => {
+        const fetchEnterpriseData = async () => {
+            try {
+                setLoading(true);
+                const response = await axios.get('/enterprises', {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`  // Assuming token is stored in localStorage
+                    }
+                });
+                setEnterpriseData(response.data);  // Set the fetched data
+                setLoading(false);
+            } catch (error) {
+                message.error('Failed to fetch enterprise data');
+                setLoading(false);
+            }
+        };
+
+        fetchEnterpriseData();
+    }, []);
 
     const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchInput(event.target.value);
     };
     const HandleCreateWorkspace = () => {
         setIsModalOpen(true);
-    }
-    const handleMenuClick = (key: string) => {
-        if (key === 'role_manage') {
-            setIsRoleModalOpen(true);
-        }
-        // Add other menu handling logic here
     }
 
     const items = [
@@ -36,7 +51,6 @@ function Workspaces() {
         {
             label: 'Role Management',
             key: 'role_manage',
-            onClick: () => handleMenuClick('role_manage')
         },
         {
             label: 'Details',
@@ -62,7 +76,7 @@ function Workspaces() {
                     </div>
                     <div className={styles.nameList}>
                         <div className={`flex gap-1 ${styles.dropdownList}`}>
-                            <h6>KaiNest Workspace</h6>
+                            <h6>KaiNest Enterprise</h6>
                             <Dropdown menu={{ items }} trigger={['click']}>
                                 <Button
                                     onClick={(e) => {
@@ -89,7 +103,7 @@ function Workspaces() {
                     </div>
                     <div className={styles.nameList}>
                         <div className={`flex gap-1 ${styles.dropdownList}`}>
-                            <h6>KaiNest Workspace</h6>
+                            <h6>KaiNest Enterprise</h6>
                             <Dropdown menu={{ items }} trigger={['click']}>
                                 <Button
                                     onClick={(e) => {
@@ -116,7 +130,7 @@ function Workspaces() {
                     </div>
                     <div className={styles.nameList}>
                         <div className={`flex gap-1 ${styles.dropdownList}`}>
-                            <h6>KaiNest Workspace</h6>
+                            <h6>KaiNest Enterprise</h6>
                             <Dropdown menu={{ items }} trigger={['click']}>
                                 <Button
                                     onClick={(e) => {
@@ -137,22 +151,10 @@ function Workspaces() {
                     </div>
                 </div>
             </div>
-            <CreateWorkspace
-                isModalOpen={isModalOpen}
-                setIsModalOpen={setIsModalOpen}
-                workSpace=""
-                onSave={(selectedColumns: string[]) => {
-                    console.log('Selected columns:', selectedColumns);
-                }}
-            />
 
-            <RoleManagementModal
-                isModalOpen={isRoleModalOpen}
-                onClose={() => setIsRoleModalOpen(false)}
-            />
 
         </div>
     );
 }
 
-export default Workspaces;
+export default EnterprisePage;

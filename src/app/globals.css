@@ -80,8 +80,9 @@
 }
 
 .ant-modal .ant-modal-title {
-    font-size: var(--h5-font) !important;
-    padding-bottom: 10px;
+    font-size: var(--h6-font) !important;
+    padding-bottom: 0;
+    font-weight: 700;
 }
 
 /* ======= antd sidebar override css ========= */
@@ -317,34 +318,6 @@ input[type="checkbox"] {
 
 .prevalidationTable .ant-select .ant-select-selector:after {
     line-height: 1;
-}
-
-.list-style li {
-    position: relative;
-    padding-left: 15px;
-    margin-bottom: 5px;
-    font-weight: var(--font-weight-500);
-}
-
-.list-style li.success {
-    color: green;
-}
-
-.list-style li.error {
-    color: var(--error-color);
-}
-
-
-.list-style li::before {
-    content: "";
-    width: 6px;
-    height: 6px;
-    background: var(--primary-200);
-    border-radius: 100%;
-    display: inline-block;
-    position: absolute;
-    left: 0;
-    top: 8px;
 }
 
 .clean_data_table {
@@ -624,4 +597,8 @@ span.ant-select-selection-placeholder {
 .custom_form .ant-form-item-control-input-content .ant-input-outlined,
 .custom_form .ant-form-item-control-input-content .ant-select-selector {
     border-color: var(--tertiary-300) !important;
+}
+
+:where(.css-dev-only-do-not-override-zg0ahe).ant-select-multiple .ant-select-selection-item {
+    height: auto;
 }

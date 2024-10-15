@@ -3,6 +3,7 @@
     align-items: center;
     display: flex;
     flex-direction: column;
+    border-bottom: 1px solid var(--tertiary-300);
 }
 
 .ModalHeader h5 {
@@ -51,8 +52,11 @@
 .selectlist p {
     margin: 0;
     font-weight: var(--font-weight-700);
+    font-size: var(--base-font);
+    color: var(--text-color);
 }
 
 .selectlist span {
     color: var(--tertiary-100);
+    font-size: var(--font-xs);
 }
