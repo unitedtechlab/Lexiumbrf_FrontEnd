@@ -8,7 +8,7 @@
 }
 
 .ant-form-item-control-input-content .ant-input-outlined {
-    border: 1px solid var(--text-color);
+    border: 1px solid var(--tertiary-300);
     padding: 10px 14px;
     line-height: 1;
     border-radius: 12px;
@@ -17,7 +17,7 @@
 }
 
 .ant-form-item-control-input-content .ant-select-selector {
-    border: 1px solid var(--text-color) !important;
+    border: 1px solid var(var(--tertiary-300)) !important;
     padding: 7px 14px !important;
     line-height: 1;
     border-radius: 12px;
@@ -246,6 +246,28 @@ ul.ant-dropdown-menu li.ant-dropdown-menu-item a svg {
     font-size: 20px;
 }
 
+.ant-col.ant-form-item-label {
+    min-width: 90px;
+    text-align: left;
+}
+
+.profile_tab .ant-tabs-nav::before {
+    display: none;
+}
+
+.profile_tab .ant-tabs-nav .ant-tabs-nav-list {
+    border-bottom: 1px solid var(--tertiary-300);
+}
+
+.profile_tab .ant-tabs-nav .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn,
+.profile_tab .ant-tabs-nav .ant-tabs-tab .ant-tabs-tab-btn:hover {
+    color: var(--new-primary-100);
+}
+
+.profile_tab .ant-tabs-nav .ant-tabs-ink-bar {
+    background: var(--new-primary-100);
+}
+
 /* import data form css */
 .ant-form-item-control-input-content .forminput {
     border: 1px solid var(--tertiary-500);
@@ -326,7 +348,7 @@ ul.ant-dropdown-menu li.ant-dropdown-menu-item a svg {
 }
 
 .ant-modal-body {
-    max-height: 400px;
+    max-height: 85vh;
     overflow-y: auto;
 }
 

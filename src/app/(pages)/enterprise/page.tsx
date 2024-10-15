@@ -60,6 +60,10 @@ function EnterprisePage() {
             label: 'Delete',
             key: 'delete',
         },
+        {
+            label: 'Edit',
+            key: 'edit',
+        },
     ];
 
     return (
