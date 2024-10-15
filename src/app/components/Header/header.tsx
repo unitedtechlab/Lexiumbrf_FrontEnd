@@ -1,24 +1,27 @@
 "use client";
 
-import React, { useMemo } from "react";
-import { BiSolidChevronDown } from "react-icons/bi";
-import { Dropdown, Space, Avatar, message } from "antd";
-import type { MenuProps } from "antd";
-import Link from "next/link";
-import Image from "next/image";
-import userImage from "@/app/assets/images/user.png";
-import { useRouter } from "next/navigation";
-import { useEmail } from "@/app/context/emailContext";
-import { removeToken } from "@/utils/auth";
+import React, { useMemo, useState } from "react";
+import { Dropdown, Space, Avatar, message, MenuProps } from "antd";
+import { BiSolidChevronDown, BiLogOut } from "react-icons/bi";
 import { VscSettings } from "react-icons/vsc";
 import { MdOutlineQuestionMark } from "react-icons/md";
 import { FaUsersCog } from "react-icons/fa";
 import { FaArrowTurnUp } from "react-icons/fa6";
-import { BiLogOut } from "react-icons/bi";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
+import userImage from "@/app/assets/images/user.png";
+import { useEmail } from "@/app/context/emailContext";
+import { removeToken } from "@/utils/auth";
+import ProfileSettings from "../Profile/profile-setting";
+import AccountSettings from "../Account/account-setting";
 
 const Header: React.FC = () => {
   const router = useRouter();
   const { email, first_name, last_name, setEmail, setFirstName, setLastName } = useEmail();
+  const [selectedAccount, setSelectedAccount] = useState("Marci Fumons");
+  const [isProfileModalVisible, setIsProfileModalVisible] = useState(false);
+  const [isAccountModalVisible, setIsAccountModalVisible] = useState(false);
 
   const handleLogout = () => {
     removeToken();
@@ -40,13 +43,13 @@ const Header: React.FC = () => {
     router.push("/signin");
   };
 
-  const items = useMemo((): MenuProps['items'] => [
+  const items: MenuProps['items'] = useMemo(() => [
     {
-      label: <Link href="/"><VscSettings /> Profile Settings</Link>,
+      label: (<a onClick={() => setIsProfileModalVisible(true)}> <VscSettings /> Profile Settings </a>),
       key: "0",
     },
     {
-      label: <Link href="/"><MdOutlineQuestionMark /> Account Settings</Link>,
+      label: (<a onClick={() => setIsAccountModalVisible(true)}> <MdOutlineQuestionMark /> Account Settings </a>),
       key: "1",
     },
     {
@@ -58,27 +61,70 @@ const Header: React.FC = () => {
       key: "3",
     },
     {
+      label: (
+        <div className="account-switch">
+          <h5 className="switch-account-title">Switch Account</h5>
+          <div className="account-item">
+            <div className="account-content">
+              <Avatar size="large" src={<Image src={userImage} alt="Marci Fumons" priority width={50} height={50} />} />
+              <div className="account-name-wrapper">
+                <h5 className="account-name">Marci Fumons</h5>
+                <h6 className="account-role">Super Admin</h6>
+              </div>
+            </div>
+            <input
+              type="radio"
+              name="account"
+              checked={selectedAccount === "Marci Fumons"}
+              onChange={() => setSelectedAccount("Marci Fumons")}
+            />
+          </div>
+          <div className="account-item">
+            <div className="account-content">
+              <Avatar size="large" src={<Image src={userImage} alt="Arun Varghese" priority width={50} height={50} />} />
+              <div className="account-name-wrapper">
+                <h5 className="account-name">Arun Varghese</h5>
+                <h6 className="account-role">User</h6>
+              </div>
+            </div>
+            <input
+              type="radio"
+              name="account"
+              checked={selectedAccount === "Arun Varghese"}
+              onChange={() => setSelectedAccount("Arun Varghese")}
+            />
+          </div>
+        </div>
+      ),
+      key: "4",
+    },
+    {
       type: "divider",
     },
     {
-      label: <a onClick={handleLogout}><BiLogOut /> Logout</a>,
-      key: "4",
+      label: <a onClick={handleLogout}><BiLogOut /> Sign Out</a>,
+      key: "5",
     },
-  ], []);
+  ], [selectedAccount]);
 
   return (
-    <Dropdown menu={{ items }} trigger={["click"]} className="nav_dropdown">
-      <a onClick={(e) => e.preventDefault()}>
-        <Space>
-          <Avatar size="large" src={<Image src={userImage} alt="User Image" priority width={40} height={40} />} />
-          <h6>
-            <span>{first_name && last_name ? `${first_name} ${last_name}` : email}</span>
-            <span className="user-role">Admin</span>
-          </h6>
-          <BiSolidChevronDown />
-        </Space>
-      </a>
-    </Dropdown>
+    <>
+      <Dropdown menu={{ items }} trigger={["click"]} className="nav_dropdown">
+        <a onClick={(e) => e.preventDefault()}>
+          <Space>
+            <Avatar size="large" src={<Image src={userImage} alt="User Image" priority width={40} height={40} />} />
+            <h6>
+              <span>{first_name && last_name ? `${first_name} ${last_name}` : email}</span>
+              <span className="user-role">{selectedAccount === "Marci Fumons" ? "Super Admin" : "User"}</span>
+            </h6>
+            <BiSolidChevronDown />
+          </Space>
+        </a>
+      </Dropdown>
+
+      <ProfileSettings visible={isProfileModalVisible} onClose={() => setIsProfileModalVisible(false)} />
+      <AccountSettings visible={isAccountModalVisible} onClose={() => setIsAccountModalVisible(false)} />
+    </>
   );
 };
 
