@@ -13,28 +13,8 @@ import axios from "axios";
 function EnterprisePage() {
     const [searchInput, setSearchInput] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [enterpriseData, setEnterpriseData] = useState<any[]>([]);  // Store enterprise data
-    const [loading, setLoading] = useState<boolean>(false);  // Loading state
-
-    useEffect(() => {
-        const fetchEnterpriseData = async () => {
-            try {
-                setLoading(true);
-                const response = await axios.get('/enterprises', {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`  // Assuming token is stored in localStorage
-                    }
-                });
-                setEnterpriseData(response.data);  // Set the fetched data
-                setLoading(false);
-            } catch (error) {
-                message.error('Failed to fetch enterprise data');
-                setLoading(false);
-            }
-        };
-
-        fetchEnterpriseData();
-    }, []);
+    const [enterpriseData, setEnterpriseData] = useState<any[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchInput(event.target.value);
