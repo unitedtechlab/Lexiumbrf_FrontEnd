@@ -153,7 +153,7 @@ section {
   background: var(--new-primary-100);
   color: var(--white-color);
   font-weight: var(--font-weight-500);
-  font-size: var(--font-sm);
+  font-size: var(--base-font);
   border: 1px solid var(--new-primary-100);
   border-radius: 8px;
   transition: all 0.35 linear;

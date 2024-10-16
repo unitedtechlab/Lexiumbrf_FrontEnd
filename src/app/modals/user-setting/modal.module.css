@@ -1,0 +1,53 @@
+.headerWrap h5,
+.headerWrap p {
+    margin: 0;
+}
+
+.userText h6 {
+    margin: 0;
+}
+
+.manageMembersSection {
+    justify-content: space-between;
+}
+
+.upgradeButton {
+    border: 1px solid #487DE7;
+    border-radius: 4px;
+    color: #487DE7;
+    transition: all 0.25s linear;
+}
+
+.upgradeButton:hover {
+    border: 1px solid #487DE7;
+    background: #487DE7 !important;
+    color: var(--white-color) !important;
+}
+
+.inviteInputSection {
+    justify-content: space-between;
+    flex-wrap: nowrap;
+}
+
+.selectField {
+    width: 100%;
+}
+
+.inviteBtn {
+    font-size: var(--font-xs);
+    padding: 12px 20px;
+}
+
+.options {
+    justify-content: space-between;
+}
+
+.selectlist h6 {
+    margin: 0;
+    font-size: var(--font-xs);
+}
+
+.revokeButton {
+    color: var(--error-color);
+    font-weight: var(--font-weight-500);
+}

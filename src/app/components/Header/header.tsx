@@ -15,6 +15,7 @@ import { useEmail } from "@/app/context/emailContext";
 import { removeToken } from "@/utils/auth";
 import ProfileSettings from "../Profile/profile-setting";
 import AccountSettings from "../Account/account-setting";
+import UserSettings from "@/app/modals/user-setting/user-setting";
 
 const Header: React.FC = () => {
   const router = useRouter();
@@ -22,6 +23,7 @@ const Header: React.FC = () => {
   const [selectedAccount, setSelectedAccount] = useState("Marci Fumons");
   const [isProfileModalVisible, setIsProfileModalVisible] = useState(false);
   const [isAccountModalVisible, setIsAccountModalVisible] = useState(false);
+  const [isUserSettingsModalVisible, setIsUserSettingsModalVisible] = useState(false);
 
   const handleLogout = () => {
     removeToken();
@@ -53,7 +55,11 @@ const Header: React.FC = () => {
       key: "1",
     },
     {
-      label: <Link href="/"><FaUsersCog /> User Settings</Link>,
+      label: (
+        <a onClick={() => setIsUserSettingsModalVisible(true)}> {/* Open UserSettings modal */}
+          <FaUsersCog /> User Settings
+        </a>
+      ),
       key: "2",
     },
     {
@@ -124,6 +130,7 @@ const Header: React.FC = () => {
 
       <ProfileSettings visible={isProfileModalVisible} onClose={() => setIsProfileModalVisible(false)} />
       <AccountSettings visible={isAccountModalVisible} onClose={() => setIsAccountModalVisible(false)} />
+      <UserSettings visible={isUserSettingsModalVisible} onClose={() => setIsUserSettingsModalVisible(false)} />
     </>
   );
 };
