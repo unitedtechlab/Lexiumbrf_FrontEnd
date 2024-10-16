@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useCallback, useEffect, useState } from 'react';
 import styles from '../workspace/workspace.module.css';
 import Searchbar from '@/app/components/Searchbar/search';
@@ -12,7 +11,6 @@ import axios from "axios";
 import { getToken } from '@/utils/auth';
 import CreateWorkspace from '@/app/modals/create-workspace/create-workspace';
 import EditableModal from '@/app/modals/edit-modal/edit-modal';
-import type MenuInfo from 'rc-menu';
 
 interface EnterpriseData {
     accountID: string,
@@ -23,11 +21,10 @@ interface EnterpriseData {
 function EnterprisePage() {
     const [searchInput, setSearchInput] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [enterpriseData, setEnterpriseData] = useState<EnterpriseData | null>(null);  // Store enterprise data
+    const [enterpriseData, setEnterpriseData] = useState<EnterpriseData | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [enterpriseName, setEnterpriseName] = useState<string>("");
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
     const fetchEnterpriseData = useCallback(async () => {
         try {
             const token = getToken();
@@ -37,22 +34,19 @@ function EnterprisePage() {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            setEnterpriseData(response.data.data);  // Set the fetched data
+            setEnterpriseData(response.data.data);
             setLoading(false);
         } catch (error) {
             message.error('Failed to fetch enterprise data');
             setLoading(false);
         }
     }, []);
-
     useEffect(() => {
         fetchEnterpriseData();
     }, [fetchEnterpriseData]);
-
     const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchInput(event.target.value);
     };
-
     const handleSaveEnterprise = async (enterpriseName: string) => {
         if (!enterpriseName.trim()) {
             console.log("empty", enterpriseName)
@@ -79,14 +73,12 @@ function EnterprisePage() {
             message.error('Failed to create enterprise');
         }
     };
-
     const HandleCreateEnterprise = () => {
         setIsModalOpen(true);
     }
     const handleEditEnterpriseName = () => {
         setIsEditModalOpen(true);
     };
-
     const handleEditSubmit = async (enterpriseName: string, othervalue: string) => {
         setLoading(true);
         try {
@@ -98,7 +90,6 @@ function EnterprisePage() {
                     Authorization: `Bearer ${token}`,
                 },
             });
-
             if (response.status === 200) {
                 message.success('Enterprise updated successfully!');
                 setEnterpriseData((prevData) =>
@@ -112,7 +103,6 @@ function EnterprisePage() {
             setIsEditModalOpen(false);
         }
     };
-
     const handleCancel = () => {
         setIsEditModalOpen(false);
     };
@@ -141,19 +131,16 @@ function EnterprisePage() {
             key: 'delete',
         },
     ];
-
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
         return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
     };
-
     return (
         <div className={styles.workspacePage}>
             <div className={`${styles.searchView} flex justify-space-between gap-1`}>
                 <Searchbar value={searchInput} onChange={handleSearchInputChange} />
                 <Button className="btn" onClick={HandleCreateEnterprise}>Create</Button>
             </div>
-
             <div className={styles.workspaceWrapper}>
                 <div className={`flex gap-1 ${styles.workspaceBox}`}>
                     <div className={styles.times}>
@@ -185,24 +172,24 @@ function EnterprisePage() {
                     </div>
                 </div>
             </div>
-
             <CreateWorkspace
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
                 workSpace="Enterprise"
-                onSave={handleSaveEnterprise} name={'Enterprise'} />
+                onSave={handleSaveEnterprise}
+                name={'Enterprise'}
+            />
 
             <EditableModal
                 open={isEditModalOpen}
                 title="Edit Enterprise"
                 initialValue={enterpriseData?.accountname || ''}
                 fieldLabel="Enterprise Name"
-                onSubmit={(enterpriseName: string, someOtherValue: string) => handleEditSubmit(enterpriseName, "someOtherValue")}
+                onSubmit={(enterpriseName: string) => handleEditSubmit(enterpriseName, "someOtherValue")}
                 onCancel={handleCancel}
                 isLoading={loading}
             />
         </div>
     );
 }
-
 export default EnterprisePage;

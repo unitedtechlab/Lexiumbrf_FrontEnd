@@ -38,13 +38,6 @@
     z-index: 2;
 }
 
-.hrline {
-    margin-bottom: 1rem;
-    border-color: var(--tertiary-300);
-    box-shadow: none;
-    border-top: 0;
-}
-
 .options {
     justify-content: flex-start;
 }

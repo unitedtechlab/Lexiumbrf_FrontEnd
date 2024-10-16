@@ -30,7 +30,7 @@ export default function Dashboard() {
 
       <div className={dashbaord.welcomeWrapper}>
         <div className={dashbaord.welcomeImage}>
-          <Image src={welcomeImg} alt="Welcome Image" height={450} loading="lazy" />
+          <Image src={welcomeImg} alt="Welcome Image" height={380} loading="lazy" />
         </div>
         <div className={dashbaord.welcomeText}>
           <h4>Welcome to your Lexium Workspace!</h4>
@@ -38,14 +38,13 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <CreateWorkspace
+      {/* <CreateWorkspace
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
         workSpace=""
-        onSave={(selectedColumns: string[]) => {
-          console.log('Selected columns:', selectedColumns);
-        }}
-      />
+        onSave={handleSaveWorkspace}
+        name={'Workspace'}
+      /> */}
     </div>
   );
 }

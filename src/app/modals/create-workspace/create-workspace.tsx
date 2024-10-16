@@ -1,4 +1,4 @@
-import { Button, Modal, Input, Select, Avatar, Form, message } from "antd";
+import { Button, Modal, Input, Select, Avatar, Form, message, Divider } from "antd";
 import { useState } from "react";
 import dashbaord from "./workspace.module.css";
 import userImage from "@/app/assets/images/user.png";
@@ -9,7 +9,7 @@ interface CreateWorkspaceProps {
     isModalOpen: boolean;
     setIsModalOpen: (isOpen: boolean) => void;
     workSpace: string;
-    onSave: (workspaceName: string) => void;  // Update onSave to accept workspaceName
+    onSave: (workspaceName: string) => void;
 }
 
 const { Option } = Select;
@@ -31,7 +31,6 @@ const CreateWorkspace: React.FC<CreateWorkspaceProps> = ({ isModalOpen, setIsMod
             return;
         }
 
-        // Pass workspaceName and selected members to onSave
         onSave(workspaceName);
         setIsModalOpen(false);
     };
@@ -75,7 +74,7 @@ const CreateWorkspace: React.FC<CreateWorkspaceProps> = ({ isModalOpen, setIsMod
                 <Form.Item
                     name={name}
                     label={`${name} Name*`}
-                    rules={[{ required: true, message: `Please enter ${name} name` }]}  // Add validation rules
+                    rules={[{ required: true, message: `Please enter ${name} name` }]}
                 >
                     <Input
                         placeholder={`${name} Name`}
@@ -83,20 +82,21 @@ const CreateWorkspace: React.FC<CreateWorkspaceProps> = ({ isModalOpen, setIsMod
                         value={workspaceName}
                     />
                 </Form.Item>
-                <hr className={dashbaord.hrline} />
+                <Divider />
                 <Form.Item
                     name="members"
                     label="Members"
                 >
                     <Select
                         mode="multiple"
-                        placeholder="Select members"
+                        placeholder="e.g. Linear"
                         value={selectedMembers}
                         onChange={setSelectedMembers}
+                        optionLabelProp="label"
                         style={{ width: '100%' }}
                     >
                         {users.map((user) => (
-                            <Option key={user.id} value={user.username}>
+                            <Option key={user.id} value={user.username} label={user.name}>
                                 <div className={`flex gap-1 ${dashbaord.options}`}>
                                     <Image src={userImage} alt="user image" width={38} height={38} />
                                     <div className={dashbaord.selectlist}>

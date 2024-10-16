@@ -35,7 +35,7 @@ const OTPPage: React.FC = () => {
             if (response.status === 200) {
                 message.success(response.data.mesage || 'OTP verified successfully. Redirecting to dashboard...');
                 setToken(response.data.token);
-                router.push('/dashboard');
+                router.push('/plans');
             } else {
                 message.error(response.data.error || 'OTP verification failed. Please try again.');
             }

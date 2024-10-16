@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useCallback, useEffect, useState } from 'react';
 import styles from './workspace.module.css';
 import Searchbar from '@/app/components/Searchbar/search';
@@ -58,11 +57,9 @@ function Workspaces() {
             setLoading(false);
         }
     }, []);
-
     useEffect(() => {
         fetchWorkspaceData();
     }, [fetchWorkspaceData]);
-
     const handleSaveWorkspace = async (workSpaceName: string) => {
         if (!workSpaceName.trim()) {
             message.error('Enterprise name cannot be empty!');
@@ -129,7 +126,6 @@ function Workspaces() {
         setCurrentWorkspaceId(ID);
         setIsEditModalOpen(true);
     };
-
     const handleCancel = () => {
         setIsEditModalOpen(false);
     };
@@ -209,14 +205,12 @@ function Workspaces() {
         const date = new Date(dateString);
         return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
     };
-
     return (
         <div className={styles.workspacePage}>
             <div className={`${styles.searchView} flex justify-space-between gap-1`}>
                 <Searchbar value={searchInput} onChange={handleSearchInputChange} />
                 <Button className="btn" onClick={HandleCreateWorkspace}>Create</Button>
             </div>
-
             <div className={styles.workspaceWrapper}>
                 {Object.keys(WorkspaceData).length > 0 ? (
                     Object.values(WorkspaceData).map((workspace: WorkspaceData) => (
@@ -253,7 +247,9 @@ function Workspaces() {
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
                 workSpace=""
-                onSave={handleSaveWorkspace} name={'Workspace'} />
+                onSave={handleSaveWorkspace}
+                name={'Workspace'}
+            />
 
             <EditableModal
                 open={isEditModalOpen}
@@ -269,17 +265,15 @@ function Workspaces() {
                 entityName={entityToDelete.name}
                 entityId={entityToDelete.id}
                 onDelete={handleDelete}
-                onOk={handleOk}  // Handle closing the modal after deletion
+                onOk={handleOk}  
                 onCancel={handleDeleteCancel}
-                isLoading={loading} // Pass the loading state
+                isLoading={loading}
             />
             <RoleManagementModal
                 isModalOpen={isRoleModalOpen}
                 onClose={() => setIsRoleModalOpen(false)}
             />
-
         </div>
     );
 }
-
 export default Workspaces;

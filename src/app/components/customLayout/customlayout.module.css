@@ -8,7 +8,7 @@
     padding: 15px 28px;
     line-height: initial;
     height: 70px;
-    background: var(--new-secondary-100);
+    background: var(--tertiary-700);
 }
 
 .header h6 {

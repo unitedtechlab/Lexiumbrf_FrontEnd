@@ -150,11 +150,11 @@ section {
 
 .btn {
   padding: 14px 24px;
-  background: var(--new-primary-100);
+  background: var(--primary-100);
   color: var(--white-color);
   font-weight: var(--font-weight-500);
-  font-size: var(--font-sm);
-  border: 1px solid var(--new-primary-100);
+  font-size: var(--base-font);
+  border: 1px solid var(--primary-100);
   border-radius: 8px;
   transition: all 0.35 linear;
   -webkit-transition: all 0.35 linear;
@@ -166,18 +166,18 @@ section {
 
 .btn:hover {
   background: var(--white-color) !important;
-  border-color: var(--new-primary-100) !important;
-  color: var(--new-primary-100) !important;
+  border-color: var(--primary-100) !important;
+  color: var(--primary-100) !important;
 }
 
 .btn.btn-outline {
   background: var(--white-color);
   border-color: var(--primary-100);
-  color: var(--secondary-100);
+  color: var(--primary-100);
 }
 
 .btn.btn-outline:hover {
-  background: var(--secondary-100) !important;
+  background: var(--primary-100) !important;
   color: var(--white-color) !important;
   border-color: var(--primary-100) !important;
 }
@@ -333,7 +333,7 @@ main {
   content: "";
   width: 6px;
   height: 6px;
-  background: var(--new-primary-100);
+  background: var(--primary-100);
   border-radius: 100%;
   display: inline-block;
   position: absolute;
