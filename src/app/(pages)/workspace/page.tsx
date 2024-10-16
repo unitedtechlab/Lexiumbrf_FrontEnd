@@ -13,7 +13,8 @@ import EditableModal from '@/app/modals/edit-modal/edit-modal';
 import { BaseURL } from '@/app/constants';
 import { getToken } from '@/utils/auth';
 import axios from 'axios';
-
+import DeleteModal from '@/app/modals/delete-modal/delete-modal';
+import type { MenuProps } from 'antd';
 interface WorkspaceData {
     ID: string,
     accountID: string,
@@ -30,13 +31,17 @@ function Workspaces() {
     const [WorkspaceData, setWorkspaceData] = useState<{ [key: string]: WorkspaceData }>({});
     const [workspaceName, setWorkspaceName] = useState<string>("");
     const [currentWorkspaceId, setCurrentWorkspaceId] = useState<string | null>(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [entityToDelete, setEntityToDelete] = useState({ name: '', id: '' });
 
     const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchInput(event.target.value);
     };
+
     const HandleCreateWorkspace = () => {
         setIsModalOpen(true);
-    }
+    };
+
     const fetchWorkspaceData = useCallback(async () => {
         try {
             const token = getToken();
@@ -47,9 +52,9 @@ function Workspaces() {
                 },
             });
             setWorkspaceData(response.data.data.workspace);
-            setLoading(false);
         } catch (error) {
             message.error('Failed to fetch enterprise data');
+        } finally {
             setLoading(false);
         }
     }, []);
@@ -81,12 +86,13 @@ function Workspaces() {
         } catch (error) {
             message.error('Failed to create enterprise');
         }
-    }
+    };
+
     const handleMenuClick = (key: string) => {
         if (key === 'role_manage') {
             setIsRoleModalOpen(true);
         }
-    }
+    };
 
     const handleEditSubmit = async (workSpaceName: string, workSpaceID: string) => {
         setLoading(true);
@@ -117,7 +123,7 @@ function Workspaces() {
             setLoading(false);
             setIsEditModalOpen(false);
         }
-    }
+    };
 
     const handleEditWorkspaceName = (ID: string) => {
         setCurrentWorkspaceId(ID);
@@ -128,24 +134,29 @@ function Workspaces() {
         setIsEditModalOpen(false);
     };
 
-    const handleDeleteWorkspace = async (workspaceID: string) => {
+    const handleOpenDeleteModal = (name: string, id: string) => {
+        setEntityToDelete({ name, id });
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleDelete = async (id: string) => {
         const confirmDelete = window.confirm('Are you sure you want to delete this workspace?');
         if (!confirmDelete) return;
-
+    
         setLoading(true);
         try {
             const token = getToken();
-            const response = await axios.delete(`${BaseURL}/workspace?account-type=Enterprise&workspaceID=${workspaceID}`, {
+            const response = await axios.delete(`${BaseURL}/workspace?account-type=Enterprise&workspaceID=${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
-
+    
             if (response.status === 200) {
                 message.success('Workspace deleted successfully!');
                 setWorkspaceData((prevData) => {
                     const updatedData = { ...prevData };
-                    delete updatedData[workspaceID];
+                    delete updatedData[id];
                     return updatedData;
                 });
             }
@@ -156,7 +167,15 @@ function Workspaces() {
         }
     };
 
-    const items = (ID: string) => [
+    const handleOk = () => {
+        setIsDeleteModalOpen(false);
+    };
+
+    const handleDeleteCancel = () => {
+        setIsDeleteModalOpen(false);
+    };
+
+    const items: (workspace: WorkspaceData) => MenuProps['items'] = (workspace) => [
         {
             label: 'User Management',
             key: 'user_manage',
@@ -164,7 +183,7 @@ function Workspaces() {
         {
             label: 'Role Management',
             key: 'role_manage',
-            onClick: () => handleMenuClick('role_manage')
+            onClick: () => handleMenuClick('role_manage'),
         },
         {
             label: 'Details',
@@ -174,17 +193,18 @@ function Workspaces() {
             label: 'Edit',
             key: 'edit',
             onClick: () => {
-                handleEditWorkspaceName(ID);
+                handleEditWorkspaceName(workspace.ID);
             },
         },
         {
             label: 'Delete',
             key: 'delete',
             onClick: () => {
-                handleDeleteWorkspace(ID);
+                handleOpenDeleteModal(workspace.name, workspace.ID);
             },
         },
     ];
+
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
         return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
@@ -207,7 +227,7 @@ function Workspaces() {
                             <div className={styles.nameList}>
                                 <div className={`flex gap-1 ${styles.dropdownList}`}>
                                     <h6>{workspace.name}</h6>
-                                    <Dropdown menu={{ items: items(workspace.ID) }} trigger={['click']}>
+                                    <Dropdown menu={{ items: items(workspace) }} trigger={['click']}>
                                         <Button
                                             onClick={(e) => e.preventDefault()}
                                             className={styles.btnDropdown}
@@ -243,6 +263,15 @@ function Workspaces() {
                 onSubmit={(workSpaceName) => handleEditSubmit(workSpaceName, currentWorkspaceId!)}
                 onCancel={handleCancel}
                 isLoading={loading}
+            />
+            <DeleteModal
+                open={isDeleteModalOpen}
+                entityName={entityToDelete.name}
+                entityId={entityToDelete.id}
+                onDelete={handleDelete}
+                onOk={handleOk}  // Handle closing the modal after deletion
+                onCancel={handleDeleteCancel}
+                isLoading={loading} // Pass the loading state
             />
             <RoleManagementModal
                 isModalOpen={isRoleModalOpen}
