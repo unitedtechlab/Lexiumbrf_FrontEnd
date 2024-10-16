@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { BaseURL } from "@/app/constants/index";
 import classes from "./plan.module.css";
+import { getToken, setToken } from "@/utils/auth";
 
 interface Plan {
     id: number;
@@ -15,6 +16,10 @@ interface Plan {
     file_size_limit: number;
     duration: number;
     file_type: string;
+}
+interface Order {
+    plan_id: number;
+    amount: number;
 }
 
 export default function Plans() {
@@ -48,9 +53,40 @@ export default function Plans() {
         fetchPlans();
     }, []);
 
-    const handleBuyNow = (planId: number) => {
-        router.push(`/purchase/${planId}`);
+    const fetchPlanOrder = async (order: Order) => {
+        setLoading(true);
+        try {
+            const token = getToken();
+            const response = await axios.post(`${BaseURL}/orders`,
+                {
+                    plan_id: order.plan_id,
+                    amount: order.amount,
+                }
+                , {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`,
+                    },
+                });
+            console.log("response order", response)
+            if (response.data.success) {
+                const { token: newToken, message: successMessage } = response.data.data;
+                message.success(successMessage || "Order placed successfully.");
+                setToken(newToken);
+                router.push("/dashboard");
+            } else {
+                setError("Failed to place your order. Please try again.");
+            }
+        } catch (error) {
+            setError("An error occurred while ordering you plan.");
+        } finally {
+            setLoading(false);
+        }
     };
+
+    // const handleBuyNow = (planId: number) => {
+    //     router.push(`/purchase/${planId}`);
+    // };
 
     if (loading) {
         return (
@@ -85,7 +121,7 @@ export default function Plans() {
                                     <span>max {plan.users_limit} user{plan.users_limit > 1 ? 's' : ''}</span>
                                     <Button
                                         className="btn"
-                                        onClick={() => handleBuyNow(plan.id)}
+                                        onClick={() => fetchPlanOrder({ plan_id: plan.id, amount: plan.price })}
                                     >
                                         Buy Now
                                     </Button>

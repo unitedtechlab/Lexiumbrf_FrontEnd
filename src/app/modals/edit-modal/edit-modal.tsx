@@ -6,7 +6,7 @@ interface EditableModalProps {
     title: string;
     initialValue: string;
     fieldLabel: string;
-    onSubmit: (newValue: string) => Promise<void>;
+    onSubmit: (newValue: string, anotherValue: string) => Promise<void>;
     onCancel: () => void;
     isLoading?: boolean;
 }
@@ -30,11 +30,8 @@ const EditableModal: React.FC<EditableModalProps> = ({
     }, [initialValue]);
 
     const validateInput = (inputValue: string) => {
-        if (inputValue.trim() === '' || inputValue.includes(' ')) {
-            setIsValid(false);
-        } else {
-            setIsValid(true);
-        }
+        const isEmpty = inputValue.trim() === '';
+        setIsValid(!isEmpty);
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,9 +41,14 @@ const EditableModal: React.FC<EditableModalProps> = ({
     };
 
     const handleOk = async () => {
+        if (!isValid) {
+            message.error(`The ${fieldLabel.toLowerCase()} cannot be empty!`);
+            return; 
+        }
+
         setInternalLoading(true);
         try {
-            await onSubmit(value);
+            await onSubmit(value , initialValue);
             setInternalLoading(false);
             onCancel();
         } catch (error) {
@@ -94,9 +96,6 @@ const EditableModal: React.FC<EditableModalProps> = ({
                             validator: (_, value) => {
                                 if (!value || value.trim() === '') {
                                     return Promise.reject(new Error(`The ${fieldLabel.toLowerCase()} cannot be empty!`));
-                                }
-                                if (value.includes(' ')) {
-                                    return Promise.reject(new Error(`The ${fieldLabel.toLowerCase()} cannot contain spaces!`));
                                 }
                                 return Promise.resolve();
                             }
