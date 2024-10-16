@@ -108,8 +108,8 @@ ul.ant-menu.menuSider li.ant-menu-item {
 
 ul.ant-menu.menuSider li.ant-menu-item.ant-menu-item-selected,
 ul.ant-menu.menuSider li.ant-menu-item:hover {
-    background: var(--new-primary-200) !important;
-    color: var(--new-primary-100) !important;
+    background: var(--primary-300) !important;
+    color: var(--primary-100) !important;
 }
 
 ul.ant-menu.menuSider li.ant-menu-item svg {
@@ -261,11 +261,11 @@ ul.ant-dropdown-menu li.ant-dropdown-menu-item a svg {
 
 .profile_tab .ant-tabs-nav .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn,
 .profile_tab .ant-tabs-nav .ant-tabs-tab .ant-tabs-tab-btn:hover {
-    color: var(--new-primary-100);
+    color: var(--primary-100);
 }
 
 .profile_tab .ant-tabs-nav .ant-tabs-ink-bar {
-    background: var(--new-primary-100);
+    background: var(--primary-100);
 }
 
 .select-custom .ant-select {
