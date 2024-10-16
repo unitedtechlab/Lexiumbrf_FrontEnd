@@ -46,7 +46,7 @@ function Workspaces() {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            setWorkspaceData(response.data.data.workspace); 
+            setWorkspaceData(response.data.data.workspace);
             setLoading(false);
         } catch (error) {
             message.error('Failed to fetch enterprise data');
@@ -60,7 +60,6 @@ function Workspaces() {
 
     const handleSaveWorkspace = async (workSpaceName: string) => {
         if (!workSpaceName.trim()) {
-            console.log("empty", workSpaceName)
             message.error('Enterprise name cannot be empty!');
             return;
         }
@@ -73,7 +72,6 @@ function Workspaces() {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            console.log("response", response);
             if (response.status === 200) {
                 message.success('Enterprise created successfully!');
                 setIsModalOpen(false);
@@ -94,7 +92,7 @@ function Workspaces() {
         setLoading(true);
         try {
             const token = getToken();
-            const response = await axios.put(`${BaseURL}/enterprises?account-type=Enterprise`, {
+            const response = await axios.put(`${BaseURL}/workspace?account-type=Enterprise`, {
                 workSpaceName: workSpaceName,
                 workSpaceID: workSpaceID,
             }, {
@@ -111,6 +109,7 @@ function Workspaces() {
                         name: workSpaceName
                     }
                 }));
+                await fetchWorkspaceData();
             }
         } catch (error) {
             message.error('Failed to update enterprise.');
@@ -120,13 +119,41 @@ function Workspaces() {
         }
     }
 
-    const handleEditWorkspaceName = (ID :string) => {
-        setCurrentWorkspaceId(ID); 
+    const handleEditWorkspaceName = (ID: string) => {
+        setCurrentWorkspaceId(ID);
         setIsEditModalOpen(true);
     };
 
     const handleCancel = () => {
         setIsEditModalOpen(false);
+    };
+
+    const handleDeleteWorkspace = async (workspaceID: string) => {
+        const confirmDelete = window.confirm('Are you sure you want to delete this workspace?');
+        if (!confirmDelete) return;
+
+        setLoading(true);
+        try {
+            const token = getToken();
+            const response = await axios.delete(`${BaseURL}/workspace?account-type=Enterprise&workspaceID=${workspaceID}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (response.status === 200) {
+                message.success('Workspace deleted successfully!');
+                setWorkspaceData((prevData) => {
+                    const updatedData = { ...prevData };
+                    delete updatedData[workspaceID];
+                    return updatedData;
+                });
+            }
+        } catch (error) {
+            message.error('Failed to delete workspace.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     const items = (ID: string) => [
@@ -153,6 +180,9 @@ function Workspaces() {
         {
             label: 'Delete',
             key: 'delete',
+            onClick: () => {
+                handleDeleteWorkspace(ID);
+            },
         },
     ];
     const formatDate = (dateString: string) => {
@@ -177,7 +207,7 @@ function Workspaces() {
                             <div className={styles.nameList}>
                                 <div className={`flex gap-1 ${styles.dropdownList}`}>
                                     <h6>{workspace.name}</h6>
-                                    <Dropdown menu={{ items: items(workspace.ID) }}trigger={['click']}>
+                                    <Dropdown menu={{ items: items(workspace.ID) }} trigger={['click']}>
                                         <Button
                                             onClick={(e) => e.preventDefault()}
                                             className={styles.btnDropdown}
@@ -208,9 +238,9 @@ function Workspaces() {
             <EditableModal
                 open={isEditModalOpen}
                 title="Edit Enterprise"
-                initialValue={"WorkspaceData?.accountname"}
+                initialValue={currentWorkspaceId ? WorkspaceData[currentWorkspaceId]?.name : ""}
                 fieldLabel="Enterprise Name"
-               onSubmit={(workSpaceName) => handleEditSubmit(workSpaceName, currentWorkspaceId!)}
+                onSubmit={(workSpaceName) => handleEditSubmit(workSpaceName, currentWorkspaceId!)}
                 onCancel={handleCancel}
                 isLoading={loading}
             />

@@ -26,7 +26,6 @@ function EnterprisePage() {
     const [enterpriseData, setEnterpriseData] = useState<EnterpriseData | null>(null);  // Store enterprise data
     const [loading, setLoading] = useState<boolean>(false);
     const [enterpriseName, setEnterpriseName] = useState<string>("");
-    const [isLoading, setIsLoading] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     const fetchEnterpriseData = useCallback(async () => {
@@ -200,7 +199,7 @@ function EnterprisePage() {
                 fieldLabel="Enterprise Name"
                 onSubmit={(enterpriseName: string, someOtherValue: string) => handleEditSubmit(enterpriseName, "someOtherValue")}
                 onCancel={handleCancel}
-                isLoading={isLoading}
+                isLoading={loading}
             />
         </div>
     );
