@@ -173,11 +173,11 @@ section {
 .btn.btn-outline {
   background: var(--white-color);
   border-color: var(--primary-100);
-  color: var(--secondary-100);
+  color: var(--primary-100);
 }
 
 .btn.btn-outline:hover {
-  background: var(--secondary-100) !important;
+  background: var(--primary-100) !important;
   color: var(--white-color) !important;
   border-color: var(--primary-100) !important;
 }

@@ -541,7 +541,7 @@ ul.ant-pagination li a.ant-pagination-item-link .ant-pagination-item-container {
 }
 
 span.ant-select-selection-placeholder {
-    color: var(--primary-100) !important;
+    color: var(--black-color) !important;
 }
 
 .conditionalmodal .ant-form-item-control-input-content .ant-input-outlined::placeholder {

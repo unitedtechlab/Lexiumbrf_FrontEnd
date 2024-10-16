@@ -1,14 +1,15 @@
-import { Button, Modal, Input, Select, Avatar, Form, Divider } from "antd";
+import { Button, Modal, Input, Select, Avatar, Form, message, Divider } from "antd";
 import { useState } from "react";
 import dashbaord from "./workspace.module.css";
 import userImage from "@/app/assets/images/user.png";
 import Image from "next/image";
 
 interface CreateWorkspaceProps {
+    name: string;
     isModalOpen: boolean;
     setIsModalOpen: (isOpen: boolean) => void;
     workSpace: string;
-    onSave: (selectedColumns: string[]) => void;
+    onSave: (workspaceName: string) => void;
 }
 
 const { Option } = Select;
@@ -19,13 +20,18 @@ const users = [
     { id: 3, name: 'Drew Cano', username: '@drew', role: 'User', avatar: 'img/avatar3' },
 ];
 
-const CreateWorkspace: React.FC<CreateWorkspaceProps> = ({ isModalOpen, setIsModalOpen, workSpace, onSave }) => {
+const CreateWorkspace: React.FC<CreateWorkspaceProps> = ({ isModalOpen, setIsModalOpen, workSpace, onSave, name }) => {
     const [workspaceName, setWorkspaceName] = useState("");
     const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
     const [form] = Form.useForm();
 
     const handleOk = () => {
-        onSave(selectedMembers);
+        if (!workspaceName.trim()) {
+            message.error(`${name} name cannot be empty!`);
+            return;
+        }
+
+        onSave(workspaceName);
         setIsModalOpen(false);
     };
 
@@ -42,8 +48,8 @@ const CreateWorkspace: React.FC<CreateWorkspaceProps> = ({ isModalOpen, setIsMod
                         <Image src={userImage} alt="user image" width={56} height={56} />
                         <Image src={userImage} alt="user image" width={48} height={48} />
                     </div>
-                    <h5>Create New Workspace</h5>
-                    <h6>You've created a new workspace! Invite colleagues to collaborate on this workspace.</h6>
+                    <h5>Create New {name}</h5>
+                    <h6>You've created a new {name}! Invite colleagues to collaborate on this {name}.</h6>
                 </div>
             }
             centered
@@ -55,7 +61,7 @@ const CreateWorkspace: React.FC<CreateWorkspaceProps> = ({ isModalOpen, setIsMod
                     Cancel
                 </Button>,
                 <Button key="submit" type="primary" onClick={handleOk} className="btn">
-                    Create Workspace
+                    Create {name}
                 </Button>,
             ]}
             width={600}
@@ -66,10 +72,15 @@ const CreateWorkspace: React.FC<CreateWorkspaceProps> = ({ isModalOpen, setIsMod
                 className="custom_form"
             >
                 <Form.Item
-                    name="name"
-                    label="Workspace Name*"
+                    name={name}
+                    label={`${name} Name*`}
+                    rules={[{ required: true, message: `Please enter ${name} name` }]}
                 >
-                    <Input placeholder="Workspace Name" onChange={(e) => setWorkspaceName(e.target.value)} />
+                    <Input
+                        placeholder={`${name} Name`}
+                        onChange={(e) => setWorkspaceName(e.target.value)}
+                        value={workspaceName}
+                    />
                 </Form.Item>
                 <Divider />
                 <Form.Item
