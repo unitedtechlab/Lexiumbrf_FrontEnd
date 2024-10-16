@@ -1,4 +1,4 @@
-import { Button, Modal, Input, Select, Avatar, Form } from "antd";
+import { Button, Modal, Input, Select, Avatar, Form, Divider } from "antd";
 import { useState } from "react";
 import dashbaord from "./workspace.module.css";
 import userImage from "@/app/assets/images/user.png";
@@ -71,7 +71,7 @@ const CreateWorkspace: React.FC<CreateWorkspaceProps> = ({ isModalOpen, setIsMod
                 >
                     <Input placeholder="Workspace Name" onChange={(e) => setWorkspaceName(e.target.value)} />
                 </Form.Item>
-                <hr className={dashbaord.hrline} />
+                <Divider />
                 <Form.Item
                     name="members"
                     label="Members"
@@ -81,10 +81,11 @@ const CreateWorkspace: React.FC<CreateWorkspaceProps> = ({ isModalOpen, setIsMod
                         placeholder="e.g. Linear"
                         value={selectedMembers}
                         onChange={setSelectedMembers}
+                        optionLabelProp="label"
                         style={{ width: '100%' }}
                     >
                         {users.map((user) => (
-                            <Option key={user.id} value={user.username}>
+                            <Option key={user.id} value={user.username} label={user.name}>
                                 <div className={`flex gap-1 ${dashbaord.options}`}>
                                     <Image src={userImage} alt="user image" width={38} height={38} />
                                     <div className={dashbaord.selectlist}>
