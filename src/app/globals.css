@@ -277,6 +277,20 @@ ul.ant-dropdown-menu li.ant-dropdown-menu-item a svg {
     padding: 5px 10px;
 }
 
+.not-found {
+    box-shadow: 0 0 15px 2px #ebebeb;
+    width: 100%;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.not-found p {
+    margin: 0;
+    font-weight: var(--font-weight-600);
+    font-size: var(--font-sm);
+}
+
 /* import data form css */
 .ant-form-item-control-input-content .forminput {
     border: 1px solid var(--tertiary-500);

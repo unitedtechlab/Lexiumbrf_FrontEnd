@@ -248,7 +248,9 @@ function Workspaces() {
                         </div>
                     ))
                 ) : (
-                    <p>No Workspace exists</p>
+                    <div className='not-found'>
+                        <p >No Workspace exists</p>
+                    </div>
                 )}
             </div>
             <CreateWorkspace

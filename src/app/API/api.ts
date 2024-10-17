@@ -15,28 +15,68 @@ const getAuthHeaders = () => {
 // Function to fetch enterprises
 export const fetchEnterprisesAPI = async (): Promise<EnterpriseResponse | null> => {
     try {
+        const token = getToken();
+        if (!token) {
+            throw new Error('No token found, please log in.');
+        }
+
+        const response = await axios.get(`${BaseURL}/enterprises?account-type=Enterprise`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (response.data && response.data.success) {
+            const rawData = response.data.data;
+            if (Array.isArray(rawData)) {
+                return {
+                    success: true,
+                    data: rawData,
+                };
+            } else if (rawData && typeof rawData === 'object') {
+                return {
+                    success: true,
+                    data: [rawData],
+                };
+            } else {
+                console.warn('No valid enterprise data found, returning empty array.');
+                return {
+                    success: false,
+                    data: [],
+                };
+            }
+        } else {
+            console.error('Failed to fetch enterprises:', response.data.error);
+            return {
+                success: false,
+                data: [],
+            };
+        }
+    } catch (error) {
+        console.error('Error fetching enterprises:', error);
+        return null;
+    }
+};
+
+// Function to create an enterprise
+export const createEnterpriseAPI = async (enterpriseName: string): Promise<any> => {
+    try {
         const headers = getAuthHeaders();
+
         if (!headers['Authorization']) {
             throw new Error('No token found, please log in.');
         }
 
-        const url = `${BaseURL}/enterprises?account-type=Enterprise`;
-        const response = await axios.get(url, { headers });
-        const rawData = response.data.data;
+        const response = await axios.post(
+            `${BaseURL}/enterprises?account-type=Enterprise`,
+            { "EnterpriseName": enterpriseName },
+            { headers }
+        );
 
-        if (!Array.isArray(rawData)) {
-            return {
-                success: response.data.success,
-                data: [rawData],
-            };
-        }
-
-        return {
-            success: response.data.success,
-            data: rawData,
-        };
+        return response.data;
     } catch (error) {
-        console.error('Error fetching enterprises:', error);
-        return null;
+        console.error('Error creating enterprise:', error);
+        throw error;
     }
 };
