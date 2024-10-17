@@ -52,8 +52,12 @@ export default function Dashboard() {
         }
       );
 
-      // Check if the enterprise creation was successful
-      if (response.data && response.data.token) {
+      // Check if the response contains success status
+      if (response.data && response.data.success) {
+        message.success(`Enterprise "${enterpriseName}" created successfully!`);
+        setIsModalOpen(false);
+      } else if (response.data && response.data.token) {
+        // Fallback: If success is not explicitly returned but token exists
         message.success(`Enterprise "${enterpriseName}" created successfully!`);
         setIsModalOpen(false);
       } else {
@@ -103,12 +107,11 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* CreateModal component for creating an enterprise */}
       <CreateModal
         open={isModalOpen}
         title="Create an Enterprise"
         fieldLabel="Enterprise Name"
-        onSubmit={handleModalSubmit} // Ensure the value is passed correctly here
+        onSubmit={handleModalSubmit}
         onCancel={() => message.warning("Please create an enterprise before proceeding.")}
         isLoading={modalLoading}
       />
