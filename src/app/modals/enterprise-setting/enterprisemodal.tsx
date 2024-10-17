@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Form, Input, Button, Table, message } from 'antd';
-import axios from 'axios';
-import { BaseURL } from "@/app/constants/index";
-import { getToken, setToken } from "@/utils/auth";
-import classes from "./modal.module.css"
+import { Modal, Button, Table, message } from 'antd';
+import { Enterprise } from '@/app/types/interface';
+import { fetchEnterprisesAPI } from '@/app/API/api';
+import classes from './modal.module.css';
+
+const formatDate = (isoDate: string) => {
+    const date = new Date(isoDate);
+    return date.toISOString().split('T')[0];
+};
 
 interface EnterpriseModalProps {
     open: boolean;
@@ -14,11 +18,34 @@ interface EnterpriseModalProps {
 }
 
 const EnterpriseModal: React.FC<EnterpriseModalProps> = ({ open, title, onSubmit, onCancel, isLoading }) => {
-    const [enterprises, setEnterprises] = useState<Array<{ id: number, name: string }>>([]);
+    const [enterprises, setEnterprises] = useState<Enterprise[]>([]);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (open) {
+            fetchEnterprises();
+        }
+    }, [open]);
+
+    const fetchEnterprises = async () => {
+        setLoading(true);
+        try {
+            const data = await fetchEnterprisesAPI();
+            if (data && data.success) {
+                setEnterprises(data.data);
+            } else {
+                message.error('Failed to fetch enterprises.');
+            }
+        } catch (error) {
+            console.error('Error fetching enterprises:', error);
+            message.error('Error fetching enterprises. Check console for details.');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleOk = async () => {
         try {
-            console.log("Validation success:");
         } catch (error) {
             console.error("Validation failed:", error);
         }
@@ -27,14 +54,26 @@ const EnterpriseModal: React.FC<EnterpriseModalProps> = ({ open, title, onSubmit
     const columns = [
         {
             title: 'Enterprise Name',
-            dataIndex: 'name',
-            key: 'name',
+            dataIndex: 'accountname',
+            key: 'accountname',
+        },
+        {
+            title: 'Created At',
+            dataIndex: 'createdAt',
+            key: 'createdAt',
+            render: (createdAt: string) => formatDate(createdAt),
+        },
+        {
+            title: 'Updated At',
+            dataIndex: 'updatedAt',
+            key: 'updatedAt',
+            render: (updatedAt: string) => formatDate(updatedAt),
         },
         {
             title: 'Action',
             key: 'action',
-            render: (text: string, record: { id: number, name: string }) => (
-                <Button type="link" >
+            render: (text: string, record: { accountID: number, accountname: string }) => (
+                <Button type="link">
                     Edit
                 </Button>
             ),
@@ -60,7 +99,7 @@ const EnterpriseModal: React.FC<EnterpriseModalProps> = ({ open, title, onSubmit
                     onClick={handleOk}
                     className="btn"
                 >
-                    save
+                    Save
                 </Button>,
             ]}
         >
@@ -68,8 +107,9 @@ const EnterpriseModal: React.FC<EnterpriseModalProps> = ({ open, title, onSubmit
                 <Table
                     dataSource={enterprises}
                     columns={columns}
-                    rowKey="id"
+                    rowKey="accountID"
                     pagination={false}
+                    loading={loading}
                 />
             </div>
         </Modal>

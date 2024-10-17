@@ -87,7 +87,7 @@ export default function Dashboard() {
     <div className={dashbaord.dashboardWrapper}>
       <div className={`${dashbaord.searchView} flex justify-space-between gap-1`}>
         <Searchbar value={searchInput} onChange={handleSearchInputChange} />
-        <Button className="btn" onClick={() => setIsModalOpen(true)}>Create</Button>
+        <Button className="btn">Create Workspace</Button>
       </div>
 
       <div className={dashbaord.welcomeWrapper}>
