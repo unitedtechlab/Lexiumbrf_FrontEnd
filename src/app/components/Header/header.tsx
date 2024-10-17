@@ -15,7 +15,7 @@ import { useEmail } from "@/app/context/emailContext";
 import { removeToken } from "@/utils/auth";
 import ProfileSettings from "../Profile/profile-setting";
 import AccountSettings from "../Account/account-setting";
-import UserSettings from "@/app/modals/user-setting/user-setting";
+import EnterpriseModal from "@/app/modals/enterprise-setting/enterprisemodal";
 
 const Header: React.FC = () => {
   const router = useRouter();
@@ -23,7 +23,8 @@ const Header: React.FC = () => {
   const [selectedAccount, setSelectedAccount] = useState("Marci Fumons");
   const [isProfileModalVisible, setIsProfileModalVisible] = useState(false);
   const [isAccountModalVisible, setIsAccountModalVisible] = useState(false);
-  const [isUserSettingsModalVisible, setIsUserSettingsModalVisible] = useState(false);
+  const [isEnterpriseModalVisible, setIsEnterpriseModalVisible] = useState(false); // State for EnterpriseModal
+  const [isEnterpriseLoading, setIsEnterpriseLoading] = useState(false); // State for loading
 
   const handleLogout = () => {
     removeToken();
@@ -45,6 +46,18 @@ const Header: React.FC = () => {
     router.push("/signin");
   };
 
+  const handleEnterpriseSubmit = async (enterpriseName: string) => {
+    // Handle the submission of the enterprise name here
+    setIsEnterpriseLoading(true);
+    console.log("Enterprise created:", enterpriseName);
+
+    setTimeout(() => {
+      message.success(`Enterprise "${enterpriseName}" created successfully!`);
+      setIsEnterpriseLoading(false);
+      setIsEnterpriseModalVisible(false);
+    }, 1000); // Simulate server request
+  };
+
   const items: MenuProps['items'] = useMemo(() => [
     {
       label: (<a onClick={() => setIsProfileModalVisible(true)}> <VscSettings /> Profile Settings </a>),
@@ -55,15 +68,11 @@ const Header: React.FC = () => {
       key: "1",
     },
     {
-      label: (
-        <a onClick={() => setIsUserSettingsModalVisible(true)}> {/* Open UserSettings modal */}
-          <FaUsersCog /> User Settings
-        </a>
-      ),
+      label: <Link href="/"><FaArrowTurnUp /> View Workspace</Link>,
       key: "2",
     },
     {
-      label: <Link href="/"><FaArrowTurnUp /> Workspace</Link>,
+      label: (<a onClick={() => setIsEnterpriseModalVisible(true)}> <FaUsersCog /> Enterprise Setting </a>), // Show EnterpriseModal
       key: "3",
     },
     {
@@ -130,7 +139,13 @@ const Header: React.FC = () => {
 
       <ProfileSettings visible={isProfileModalVisible} onClose={() => setIsProfileModalVisible(false)} />
       <AccountSettings visible={isAccountModalVisible} onClose={() => setIsAccountModalVisible(false)} />
-      <UserSettings visible={isUserSettingsModalVisible} onClose={() => setIsUserSettingsModalVisible(false)} />
+      <EnterpriseModal
+        open={isEnterpriseModalVisible}
+        title="Enterprise Settings"
+        onSubmit={handleEnterpriseSubmit}
+        onCancel={() => setIsEnterpriseModalVisible(false)}
+        isLoading={isEnterpriseLoading}
+      />
     </>
   );
 };

@@ -83,6 +83,7 @@
     font-size: var(--h6-font) !important;
     padding-bottom: 0;
     font-weight: 700;
+    font-family: var(--Roboto-family);
 }
 
 /* ======= antd sidebar override css ========= */

@@ -208,6 +208,10 @@ section {
   justify-content: space-between;
 }
 
+.no-wrap {
+  flex-wrap: nowrap;
+}
+
 .gap-1 {
   gap: 1rem;
 }

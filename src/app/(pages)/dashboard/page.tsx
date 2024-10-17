@@ -19,7 +19,10 @@ export default function Dashboard() {
   const [modalLoading, setModalLoading] = useState(false);
 
   useEffect(() => {
-    setIsModalOpen(true); // Automatically open modal when the page loads
+    const enterpriseCreated = localStorage.getItem("enterpriseCreated");
+    if (!enterpriseCreated) {
+      setIsModalOpen(true);
+    }
   }, []);
 
   const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,49 +33,40 @@ export default function Dashboard() {
     setModalLoading(true);
 
     try {
-      const token = getToken(); // Retrieve token from local storage
+      const token = getToken();
 
       if (!token) {
         throw new Error('No token found, please login.');
       }
 
-      console.log("Submitting enterpriseName:", enterpriseName); // Logging for debugging
-
-      // Make a POST request to create an enterprise using the backend API
       const response = await axios.post(
         `${BaseURL}/enterprises?account-type=Enterprise`,
         {
-          "EnterpriseName": enterpriseName // Ensure the key matches the backend expectations exactly
+          "EnterpriseName": enterpriseName
         },
         {
           headers: {
-            "Content-Type": "application/json", // Ensure the content type is set
-            "Authorization": `Bearer ${token}`, // Include the Bearer token for authentication
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
           },
         }
       );
 
-      // Check if the response contains success status
       if (response.data && response.data.success) {
         message.success(`Enterprise "${enterpriseName}" created successfully!`);
         setIsModalOpen(false);
+        localStorage.setItem("enterpriseCreated", "true");
       } else if (response.data && response.data.token) {
-        // Fallback: If success is not explicitly returned but token exists
         message.success(`Enterprise "${enterpriseName}" created successfully!`);
         setIsModalOpen(false);
+        localStorage.setItem("enterpriseCreated", "true");
       } else {
         message.error(`Failed to create enterprise: ${response.data?.error?.message || 'Unknown error'}`);
       }
-    } catch (error) {
-      // Handle backend response errors
-      console.error("API Error:", error);
-
+    }
+    catch (error) {
       if (axios.isAxiosError(error) && error.response) {
-        // Log full backend response for debugging
-        console.log("Backend Response:", error.response.data);
-
         const statusCode = error.response.status;
-
         if (statusCode === 400 && error.response.data.error?.message === "account already exists for this userID") {
           message.error("Account already exists for this user. Please try with a different account.");
         } else if (statusCode === 403 && error.response.data.error?.message === "you do not have permission to access this resource") {
@@ -88,7 +82,6 @@ export default function Dashboard() {
       setModalLoading(false);
     }
   };
-
 
   return (
     <div className={dashbaord.dashboardWrapper}>
