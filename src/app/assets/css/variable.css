@@ -5,8 +5,10 @@
   --white-color: #fff;
   --black-color: #000;
 
-  --primary-100: #341539;
-  --primary-200: #8e48e7;
+  --primary-100: #00A76F;
+  --primary-200: #087443;
+  --primary-300: #00A76F14;
+  --primary-400: #004444;
 
   --secondary-100: #111111;
   --secondary-200: #494949;
@@ -24,14 +26,9 @@
   --tertiary-400: #E7E7E7;
   --tertiary-500: #D0D5DD;
   --tertiary-600: #A9ACB4;
+  --tertiary-700: #F7F9FC;
 
   --error-color: #ff4d4f;
-
-  --new-primary-100: #00A76F;
-  --new-primary-200: #00A76F14;
-  --new-primary-300: #004444;
-
-  --new-secondary-100: #F7F9FC;
 
   --Inter-family: "Inter", sans-serif;
   --Poppins-family: "Poppins", sans-serif;

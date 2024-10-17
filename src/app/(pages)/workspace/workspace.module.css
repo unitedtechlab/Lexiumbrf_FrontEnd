@@ -9,11 +9,11 @@
 .workspaceBox {
     justify-content: flex-start;
     flex-wrap: nowrap;
-    border: 1px solid var(--new-primary-200);
+    border: 1px solid var(--primary-300);
     border-radius: 14px;
     padding: 15px 20px;
     background: #F8FFFF;
-    color: var(--new-primary-300);
+    color: var(--primary-400);
     width: 100%;
     max-width: calc(33.333% - 0.5rem);
     font-family: var(--SourCode-family);
@@ -25,7 +25,7 @@
 
 .times span {
     font-weight: var(--font-weight-600);
-    color: var(--new-primary-300);
+    color: var(--primary-400);
 }
 
 .nameList {
@@ -57,7 +57,7 @@
     padding: 2px;
     height: auto;
     border-radius: 3px;
-    color: var(--new-primary-300);
+    color: var(--primary-400);
     margin-top: 5px;
 }
 

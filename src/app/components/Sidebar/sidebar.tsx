@@ -31,6 +31,11 @@ const SidebarMenu = ({ collapsed, onCollapse }: SidebarMenuProps) => {
         },
         {
             key: '2',
+            icon: <RiDashboard2Fill />,
+            label: <Link href="/enterprise">Enterprise</Link>,
+        },
+        {
+            key: '3',
             icon: <FaFileLines />,
             label: <Link href="/create-workspace">Dashboard & Visualization</Link>,
         },

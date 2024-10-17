@@ -1,0 +1,35 @@
+.headerWrapper {
+    text-align: center;
+    padding: 20px;
+}
+
+.headerWrapper h4 {
+    margin-bottom: 6px;
+}
+
+.planBox {
+    text-align: center;
+    border: 1px solid var(--tertiary-400);
+    border-radius: 15px;
+    padding: 30px 20px;
+}
+
+.planBox span {
+    display: block;
+}
+
+.planBox h6 {
+    margin: 0;
+}
+
+.planBox h2 {
+    margin: 0;
+}
+
+.planBox button {
+    margin: 15px 0;
+}
+
+.planBox ul {
+    text-align: left;
+}

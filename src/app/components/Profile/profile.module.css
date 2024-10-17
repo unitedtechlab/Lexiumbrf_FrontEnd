@@ -1,0 +1,20 @@
+.profileHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 1rem;
+}
+
+.profileInfo h5 {
+    margin: 0;
+}
+
+.profileInfo p {
+    color: grey;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.generalTab {
+    padding: 0 8px;
+}
