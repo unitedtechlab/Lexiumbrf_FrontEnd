@@ -6,7 +6,7 @@ interface EditableModalProps {
     title: string;
     initialValue: string;
     fieldLabel: string;
-    onSubmit: (newValue: string) => Promise<void>;
+    onSubmit: (newValue: string, anotherValue: string) => Promise<void>;
     onCancel: () => void;
     isLoading?: boolean;
 }
@@ -20,21 +20,21 @@ const EditableModal: React.FC<EditableModalProps> = ({
     onCancel,
     isLoading = false
 }) => {
+    const [form] = Form.useForm();
     const [value, setValue] = useState(initialValue);
     const [internalLoading, setInternalLoading] = useState(false);
     const [isValid, setIsValid] = useState(true);
 
     useEffect(() => {
-        setValue(initialValue);
-        validateInput(initialValue);
-    }, [initialValue]);
+        if (open) {
+            form.setFieldsValue({ name: initialValue });
+            validateInput(initialValue);
+        }
+    }, [initialValue, open]);
 
     const validateInput = (inputValue: string) => {
-        if (inputValue.trim() === '' || inputValue.includes(' ')) {
-            setIsValid(false);
-        } else {
-            setIsValid(true);
-        }
+        const isEmpty = inputValue.trim() === '';
+        setIsValid(!isEmpty);
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,9 +44,14 @@ const EditableModal: React.FC<EditableModalProps> = ({
     };
 
     const handleOk = async () => {
+        if (!isValid) {
+            message.error(`The ${fieldLabel.toLowerCase()} cannot be empty!`);
+            return;
+        }
         setInternalLoading(true);
         try {
-            await onSubmit(value);
+            await onSubmit(value, initialValue);
+            // message.success(`${title} updated successfully!`);
             setInternalLoading(false);
             onCancel();
         } catch (error) {
@@ -78,8 +83,10 @@ const EditableModal: React.FC<EditableModalProps> = ({
             ]}
         >
             <Form
+                form={form}
                 name="editable"
                 layout="vertical"
+                initialValues={{ name: initialValue }}
                 onFinish={handleOk}
             >
                 <Form.Item
@@ -88,19 +95,12 @@ const EditableModal: React.FC<EditableModalProps> = ({
                     rules={[
                         {
                             required: true,
-                            message: `Please input the ${fieldLabel.toLowerCase()}!`
+                            message: `Please input the ${fieldLabel.toLowerCase()}!`,
                         },
                         {
-                            validator: (_, value) => {
-                                if (!value || value.trim() === '') {
-                                    return Promise.reject(new Error(`The ${fieldLabel.toLowerCase()} cannot be empty!`));
-                                }
-                                if (value.includes(' ')) {
-                                    return Promise.reject(new Error(`The ${fieldLabel.toLowerCase()} cannot contain spaces!`));
-                                }
-                                return Promise.resolve();
-                            }
-                        }
+                            min: 3,
+                            message: `The ${fieldLabel.toLowerCase()} must be at least 3 characters.`,
+                        },
                     ]}
                 >
                     <Input
@@ -109,6 +109,7 @@ const EditableModal: React.FC<EditableModalProps> = ({
                         placeholder={`Enter ${fieldLabel.toLowerCase()}`}
                     />
                 </Form.Item>
+
             </Form>
         </Modal>
     );
