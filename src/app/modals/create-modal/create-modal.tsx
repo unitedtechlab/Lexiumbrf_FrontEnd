@@ -1,4 +1,3 @@
-// CreateModal.tsx
 import React, { useState } from 'react';
 import { Modal, Form, Input, Button } from 'antd';
 
@@ -19,7 +18,7 @@ const CreateModal: React.FC<CreateModalProps> = ({ open, title, fieldLabel, onSu
         try {
             const values = await form.validateFields();
             if (isInputValid) {
-                onSubmit(values.field);
+                onSubmit(values[fieldLabel]);
             }
         } catch (error) {
             console.error("Validation failed:", error);
@@ -28,7 +27,6 @@ const CreateModal: React.FC<CreateModalProps> = ({ open, title, fieldLabel, onSu
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        // Check if the input contains spaces
         setIsInputValid(!/\s/.test(value));
     };
 
@@ -57,12 +55,9 @@ const CreateModal: React.FC<CreateModalProps> = ({ open, title, fieldLabel, onSu
                 </Button>,
             ]}
         >
-            <Form
-                form={form}
-                layout="vertical"
-            >
+            <Form form={form} layout="vertical">
                 <Form.Item
-                    name="field"
+                    name={fieldLabel}
                     label={fieldLabel}
                     rules={[
                         { required: true, message: `Please enter ${fieldLabel}` },

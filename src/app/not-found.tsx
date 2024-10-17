@@ -12,7 +12,7 @@ export default function NotFound() {
           <Image src={notFound} alt="Not Found image" width={200} />
         </div>
         <p>Wea can't seem to find a page you are looking for</p>
-        <Link href="/" className="btn">Go Back</Link>
+        <Link href="/dashboard" className="btn">Go Back</Link>
       </div>
     </div>
   );
