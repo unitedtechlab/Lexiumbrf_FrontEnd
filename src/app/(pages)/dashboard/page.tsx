@@ -1,19 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
 import Image from "next/image";
-import { Button, message } from "antd";
+import { message } from "antd";
 import dashboardStyles from "./dashboard.module.css";
 import welcomeImg from "../../assets/images/dashboard.png";
 import CreateModal from "@/app/modals/create-modal/create-modal";
 import { createEnterpriseAPI, fetchEnterprisesAPI } from "@/app/API/api";
 import { getToken } from "@/utils/auth";
-
-const Searchbar = dynamic(() => import("../../components/Searchbar/search"), { ssr: false });
+import Link from "next/link";
 
 export default function Dashboard() {
-  const [searchInput, setSearchInput] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
   const [accountID, setAccountID] = useState<number | null>(null);
@@ -44,9 +41,6 @@ export default function Dashboard() {
     fetchEnterprises();
   }, []);
 
-  const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(event.target.value);
-  };
 
   const handleModalSubmit = async (enterpriseName: string) => {
     setModalLoading(true);
@@ -77,13 +71,9 @@ export default function Dashboard() {
     }
   };
 
+
   return (
     <>
-      <div className={`${dashboardStyles.searchView} flex justify-space-between gap-1`}>
-        <Searchbar value={searchInput} onChange={handleSearchInputChange} />
-        <Button className="btn">Create Workspace</Button>
-      </div>
-
       <div className={dashboardStyles.welcomeWrapper}>
         <div className={dashboardStyles.welcomeImage}>
           <Image className={dashboardStyles.welcomeImg} src={welcomeImg} alt="Welcome Image" loading="lazy" />
@@ -94,6 +84,7 @@ export default function Dashboard() {
             Upload a file, connect to a database, or explore sample datasets to get familiar with Bird Eye's
             powerful features.
           </h5>
+          <Link href="/workspace" className="btn">Go to Workspace</Link>
         </div>
       </div>
 
@@ -105,6 +96,7 @@ export default function Dashboard() {
         onCancel={() => message.warning("Please create an enterprise before proceeding.")}
         isLoading={modalLoading}
       />
+
     </>
   );
 }

@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Col, Row, Divider, Button, message, Spin } from "antd";
+import { Col, Row, Divider, Button, message, Spin, Empty } from "antd";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { BaseURL } from "@/app/constants/index";
 import classes from "./plan.module.css";
+import Image from "next/image";
+import Logo from '@/app/assets/images/logo.png';
 
 interface Plan {
     id: number;
@@ -48,30 +50,14 @@ export default function Plans() {
         fetchPlans();
     }, []);
 
-    const handleBuyNow = (planId: number) => {
-        router.push(`/purchase/${planId}`);
-    };
-
-    if (loading) {
-        return (
-            <div className="loading-spinner">
-                <Spin />
-            </div>
-        );
-    }
-
-    if (error) {
-        return <div className="error-message">{error}</div>;
-    }
 
     return (
-        <div className={`${classes.planWrapper} flex`}>
+        <div className={`${classes.planWrapper}`}>
             <div className="container">
                 <div className={classes.headerWrapper}>
-                    <h4>Choose Your Best Plan for Your Business</h4>
-                    <p>
-                        Individual and Teams <b>Plan</b>
-                    </p>
+                    <Image src={Logo} alt="Logo" />
+                    <h5>Choose Your Best Plan for Your Business</h5>
+                    <p>Individual and Teams <b>Plan</b></p>
                 </div>
 
                 <Row gutter={16}>
@@ -83,10 +69,7 @@ export default function Plans() {
                                     <h2>${plan.price}</h2>
                                     <span>per month</span>
                                     <span>max {plan.users_limit} user{plan.users_limit > 1 ? 's' : ''}</span>
-                                    <Button
-                                        className="btn"
-                                        onClick={() => handleBuyNow(plan.id)}
-                                    >
+                                    <Button className="btn">
                                         Buy Now
                                     </Button>
                                     <Divider />
@@ -101,7 +84,9 @@ export default function Plans() {
                             </Col>
                         ))
                     ) : (
-                        <div>No plans available</div>
+                        <div className='not-found'>
+                            <Empty description="No Plans Available" />
+                        </div>
                     )}
                 </Row>
             </div>

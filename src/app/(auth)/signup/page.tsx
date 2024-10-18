@@ -69,13 +69,11 @@ const SignUpPage: React.FC = () => {
   };
 
   const handleGoogleSignUp = () => {
-    const googleOAuthURL = `${BaseURL}/auth/google`;
-    window.location.href = googleOAuthURL;
+    window.location.href = `${BaseURL}/users/provider-login`;
   };
 
   const handleMicrosoftSignUp = () => {
-    const microsoftOAuthURL = `${BaseURL}/auth/microsoft`;
-    window.location.href = microsoftOAuthURL;
+    window.location.href = `${BaseURL}/auth/microsoft`;
   };
 
   return (

@@ -3,8 +3,9 @@
     padding: 20px;
 }
 
-.headerWrapper h4 {
-    margin-bottom: 6px;
+.headerWrapper h5 {
+    margin-bottom: 5px;
+    margin-top: 1rem;
 }
 
 .planBox {

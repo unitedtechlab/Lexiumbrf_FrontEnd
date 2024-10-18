@@ -71,7 +71,7 @@ const Header: React.FC = () => {
       key: "2",
     },
     {
-      label: (<a onClick={() => setIsEnterpriseModalVisible(true)}> <FaUsersCog /> Enterprise Setting </a>), // Show EnterpriseModal
+      label: (<a onClick={() => setIsEnterpriseModalVisible(true)}> <FaUsersCog /> Enterprise Setting </a>),
       key: "3",
     },
     {
@@ -136,7 +136,13 @@ const Header: React.FC = () => {
         </a>
       </Dropdown>
 
-      <ProfileSettings visible={isProfileModalVisible} onClose={() => setIsProfileModalVisible(false)} />
+      <ProfileSettings
+        visible={isProfileModalVisible}
+        onClose={() => setIsProfileModalVisible(false)}
+        firstName={first_name}
+        lastName={last_name}
+        email={email}
+      />
       <AccountSettings visible={isAccountModalVisible} onClose={() => setIsAccountModalVisible(false)} />
       <EnterpriseModal
         open={isEnterpriseModalVisible}

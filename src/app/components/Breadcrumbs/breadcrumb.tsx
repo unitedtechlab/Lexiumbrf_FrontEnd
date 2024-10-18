@@ -16,9 +16,9 @@ interface BreadCrumbProps {
 const BreadCrumb: React.FC<BreadCrumbProps> = ({ breadcrumbs }) => {
     const memoizedBreadcrumbs = useMemo(() => {
         return breadcrumbs.map((breadcrumb, index) => (
-            <li key={index} className={index === breadcrumbs.length - 1 ? classes.active : ""}>
-                <Link href={breadcrumb.href}>
-                    {index === 0 && <Image src={Leftarrow} alt="Left Arrow" width={24} height={24} />}
+            <li key={index} className={`${index === breadcrumbs.length - 1 ? classes.active : ""}`}>
+                <Link href={breadcrumb.href} className={`flex alinc ${classes.linkBreadcrumb}`}>
+                    {index === 0 && <Image src={Leftarrow} alt="Left Arrow" width={22} height={22} />}
                     <p>{breadcrumb.label}</p>
                 </Link>
             </li>

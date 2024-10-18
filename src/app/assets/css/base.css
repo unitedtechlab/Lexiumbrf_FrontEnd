@@ -241,6 +241,10 @@ section {
   align-items: center;
 }
 
+.text-right {
+  text-align: right;
+}
+
 main {
   background-color: var(--white-color);
   height: 100%;

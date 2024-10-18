@@ -411,12 +411,12 @@ ul.ant-dropdown-menu li.ant-dropdown-menu-item a svg {
 } */
 
 input[type="checkbox"] {
-    accent-color: var(--black-color);
+    accent-color: var(--primary-100);
 }
 
 .ant-checkbox-checked span.ant-checkbox-inner {
-    background: var(--black-color) !important;
-    border-color: var(--black-color) !important;
+    background: var(--primary-100) !important;
+    border-color: var(--primary-100) !important;
 }
 
 /* .prevalidationTable .ant-select,
