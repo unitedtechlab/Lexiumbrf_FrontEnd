@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styles from './workspace.module.css';
 import Searchbar from '@/app/components/Searchbar/search';
-import { Button, Dropdown, message } from 'antd';
+import { Button, Dropdown, message, Empty } from 'antd';
 import Image from "next/image";
 import User1 from '@/app/assets/images/user.jpg';
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
@@ -189,18 +189,30 @@ function Workspaces() {
             onClick: () => handleMenuClick('role_manage'),
         },
         {
-            label: 'Details',
+            label: (
+                <span style={{ color: "orange" }}>
+                    Details
+                </span>
+            ),
             key: 'details',
         },
         {
-            label: 'Edit',
+            label: (
+                <span style={{ color: "green" }}>
+                    Edit
+                </span>
+            ),
             key: 'edit',
             onClick: () => {
                 handleEditWorkspaceName(workspace.ID);
             },
         },
         {
-            label: 'Delete',
+            label: (
+                <span style={{ color: "red" }}>
+                    Delete
+                </span>
+            ),
             key: 'delete',
             onClick: () => {
                 handleOpenDeleteModal(workspace.name, workspace.ID);
@@ -249,7 +261,7 @@ function Workspaces() {
                     ))
                 ) : (
                     <div className='not-found'>
-                        <p >No Workspace exists</p>
+                        <Empty description="No Workspace exists" />
                     </div>
                 )}
             </div>

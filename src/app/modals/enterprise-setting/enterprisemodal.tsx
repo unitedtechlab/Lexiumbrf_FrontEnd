@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Table, message } from 'antd';
+import { Modal, Button, Table, message, Input } from 'antd';
 import { Enterprise } from '@/app/types/interface';
-import { fetchEnterprisesAPI } from '@/app/API/api';
+import { fetchEnterprisesAPI, editEnterpriseAPI } from '@/app/API/api';
 import classes from './modal.module.css';
+import { FaRegEdit } from "react-icons/fa";
 
 const formatDate = (isoDate: string) => {
     const date = new Date(isoDate);
@@ -12,14 +13,16 @@ const formatDate = (isoDate: string) => {
 interface EnterpriseModalProps {
     open: boolean;
     title: string;
-    onSubmit: (value: string) => void;
     onCancel: () => void;
+    onSubmit: (enterpriseName: string) => Promise<void>;
     isLoading: boolean;
 }
 
 const EnterpriseModal: React.FC<EnterpriseModalProps> = ({ open, title, onSubmit, onCancel, isLoading }) => {
     const [enterprises, setEnterprises] = useState<Enterprise[]>([]);
     const [loading, setLoading] = useState(false);
+    const [editingEnterprise, setEditingEnterprise] = useState<Enterprise | null>(null);
+    const [enterpriseName, setEnterpriseName] = useState("");
 
     useEffect(() => {
         if (open) {
@@ -44,10 +47,36 @@ const EnterpriseModal: React.FC<EnterpriseModalProps> = ({ open, title, onSubmit
         }
     };
 
-    const handleOk = async () => {
+    const handleEdit = (record: Enterprise) => {
+        setEditingEnterprise(record);
+        setEnterpriseName(record.accountname);
+    };
+
+    const handleUpdate = async () => {
+        if (!editingEnterprise) return;
+
         try {
+            const updatedEnterprise = {
+                ...editingEnterprise,
+                accountname: enterpriseName,
+            };
+
+            const response = await editEnterpriseAPI(updatedEnterprise);
+            if (response && response.success) {
+                message.success(`Enterprise "${enterpriseName}" updated successfully!`);
+                fetchEnterprises();
+                setEditingEnterprise(null);
+                setEnterpriseName("");
+            } else {
+                message.error(`Failed to update enterprise: ${response.data?.error?.message || 'Unknown error'}`);
+            }
         } catch (error) {
-            console.error("Validation failed:", error);
+            console.error("Error updating enterprise:", error);
+            if (error instanceof Error) {
+                message.error(`Error updating enterprise: ${error.message}`);
+            } else {
+                message.error("An unexpected error occurred. Please check the console for details.");
+            }
         }
     };
 
@@ -72,9 +101,9 @@ const EnterpriseModal: React.FC<EnterpriseModalProps> = ({ open, title, onSubmit
         {
             title: 'Action',
             key: 'action',
-            render: (text: string, record: { accountID: number, accountname: string }) => (
-                <Button type="link">
-                    Edit
+            render: (text: string, record: Enterprise) => (
+                <Button type="link" className={classes.editbtn} onClick={() => handleEdit(record)}>
+                    <FaRegEdit />
                 </Button>
             ),
         },
@@ -84,7 +113,6 @@ const EnterpriseModal: React.FC<EnterpriseModalProps> = ({ open, title, onSubmit
         <Modal
             title={title}
             open={open}
-            onOk={handleOk}
             onCancel={onCancel}
             confirmLoading={isLoading}
             centered
@@ -92,14 +120,6 @@ const EnterpriseModal: React.FC<EnterpriseModalProps> = ({ open, title, onSubmit
             footer={[
                 <Button key="cancel" onClick={onCancel} className="btn btn-outline">
                     Cancel
-                </Button>,
-                <Button
-                    key="submit"
-                    type="primary"
-                    onClick={handleOk}
-                    className="btn"
-                >
-                    Save
                 </Button>,
             ]}
         >
@@ -111,6 +131,18 @@ const EnterpriseModal: React.FC<EnterpriseModalProps> = ({ open, title, onSubmit
                     pagination={false}
                     loading={loading}
                 />
+                {editingEnterprise && (
+                    <div className={`flex gap-1 ${classes.editFrom}`}>
+                        <Input
+                            value={enterpriseName}
+                            onChange={(e) => setEnterpriseName(e.target.value)}
+                            placeholder="Enter new enterprise name"
+                        />
+                        <Button type="primary" onClick={handleUpdate} className='btn btn-sm'>
+                            Update
+                        </Button>
+                    </div>
+                )}
             </div>
         </Modal>
     );

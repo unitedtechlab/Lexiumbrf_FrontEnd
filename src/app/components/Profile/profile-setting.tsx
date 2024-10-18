@@ -2,7 +2,7 @@ import { Button, Divider, Input, Modal, Tabs, Form, Row, Col, Upload, message } 
 import React, { useState } from 'react';
 import classes from './profile.module.css';
 import Image from "next/image";
-import user from '@/app/assets/images/user.png';  // Default user image
+import user from '@/app/assets/images/user.png';
 import { UploadOutlined } from '@ant-design/icons';
 
 const { TabPane } = Tabs;
@@ -14,7 +14,7 @@ interface ProfileSettingsModalProps {
 
 const ProfileSettings: React.FC<ProfileSettingsModalProps> = ({ visible, onClose }) => {
     const [activeTab, setActiveTab] = useState('general');
-    const [uploadedImage, setUploadedImage] = useState<string | null>(null);  // Store the uploaded image preview
+    const [uploadedImage, setUploadedImage] = useState<string | null>(null);
 
     const normFile = (e: any) => {
         if (Array.isArray(e)) {
@@ -23,7 +23,6 @@ const ProfileSettings: React.FC<ProfileSettingsModalProps> = ({ visible, onClose
         return e?.fileList;
     };
 
-    // Handle before upload to restrict file type
     const beforeUpload = (file: any) => {
         const isImage = file.type.startsWith('image/');
         if (!isImage) {
@@ -35,10 +34,9 @@ const ProfileSettings: React.FC<ProfileSettingsModalProps> = ({ visible, onClose
     // Handle file change event to preview uploaded image
     const handleChange = (info: any) => {
         if (info.file.status === 'done') {
-            // Get the uploaded file URL and set it as the preview
             const reader = new FileReader();
             reader.onload = () => {
-                setUploadedImage(reader.result as string);  // Preview uploaded image
+                setUploadedImage(reader.result as string);
             };
             reader.readAsDataURL(info.file.originFileObj);
         }
@@ -58,7 +56,6 @@ const ProfileSettings: React.FC<ProfileSettingsModalProps> = ({ visible, onClose
             <div className={classes.profileModal}>
                 <div className={classes.profileHeader}>
                     <div className={classes.profileImage}>
-                        {/* Display uploaded image or default image */}
                         <Image
                             src={uploadedImage || user}
                             alt="User Profile"
@@ -67,7 +64,7 @@ const ProfileSettings: React.FC<ProfileSettingsModalProps> = ({ visible, onClose
                         />
                     </div>
                     <div className={classes.profileInfo}>
-                        <h5>Marci Fumons</h5>
+                        <h6>Marci Fumons</h6>
                         <p>@marci</p>
                     </div>
                 </div>

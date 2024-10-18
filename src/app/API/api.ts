@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { BaseURL } from '@/app/constants/index';
 import { getToken } from '@/utils/auth';
-import { EnterpriseResponse } from '@/app/types/interface';
+import { Enterprise, EnterpriseResponse } from '@/app/types/interface';
 
 const getAuthHeaders = () => {
     const token = getToken();
@@ -77,6 +77,32 @@ export const createEnterpriseAPI = async (enterpriseName: string): Promise<any> 
         return response.data;
     } catch (error) {
         console.error('Error creating enterprise:', error);
+        throw error;
+    }
+};
+
+// Function to Edit an enterprise
+
+export const editEnterpriseAPI = async (enterprise: Enterprise): Promise<any> => {
+    try {
+        const token = getToken();
+        if (!token) {
+            throw new Error('No token found, please log in.');
+        }
+
+        const response = await axios.put(`${BaseURL}/enterprises?account-type=Enterprise`, {
+            accountID: enterprise.accountID,
+            enterpriseName: enterprise.accountname,
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error('Error updating enterprise:', error);
         throw error;
     }
 };

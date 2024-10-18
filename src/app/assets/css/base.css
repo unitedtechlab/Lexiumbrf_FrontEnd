@@ -193,6 +193,11 @@ section {
   background: var(--white-color);
 }
 
+.btn-sm {
+  padding: 10px 20px;
+  font-size: var(--font-xs);
+}
+
 .full-width {
   width: 100%;
 }

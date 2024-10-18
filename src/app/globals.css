@@ -80,10 +80,10 @@
 }
 
 .ant-modal .ant-modal-title {
-    font-size: var(--h6-font) !important;
+    font-size: var(--font-sm) !important;
     padding-bottom: 0;
-    font-weight: 700;
-    font-family: var(--Roboto-family);
+    font-family: var(--Poppins-family);
+    font-weight: var(--font-weight-600);
 }
 
 /* ======= antd sidebar override css ========= */
@@ -285,12 +285,6 @@ ul.ant-dropdown-menu li.ant-dropdown-menu-item a svg {
     text-align: center;
 }
 
-.not-found p {
-    margin: 0;
-    font-weight: var(--font-weight-600);
-    font-size: var(--font-sm);
-}
-
 /* import data form css */
 .ant-form-item-control-input-content .forminput {
     border: 1px solid var(--tertiary-500);
@@ -359,11 +353,11 @@ ul.ant-dropdown-menu li.ant-dropdown-menu-item a svg {
 .ant-table-content table thead.ant-table-thead th.ant-table-cell {
     background: var(--tertiary-400);
     text-transform: uppercase;
-    padding: 10px 20px;
-    font-weight: 700;
+    font-weight: var(--font-weight-600);
     font-size: 13px;
     color: var(--secondary-300);
     text-align: center;
+    font-family: var(--Poppins-family);
 }
 
 .ant-table-content table tbody.ant-table-tbody {
