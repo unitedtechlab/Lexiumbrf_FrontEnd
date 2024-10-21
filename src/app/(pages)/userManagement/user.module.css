@@ -12,6 +12,7 @@
 }
 
 .upgradeButton {
+    padding: 12px 20px;
     border: 1px solid #487DE7;
     border-radius: 4px;
     color: #487DE7;
@@ -30,12 +31,12 @@
 }
 
 .selectField {
-    width: 100%;
+    width: 50%;
 }
 
-.inviteBtn {
-    font-size: var(--font-xs);
-    padding: 12px 20px;
+.selectCustom.ant-input-outlined:hover {
+    border-color: var(--primary-100) !important;
+    background-color: #ffffff;
 }
 
 .options {
@@ -50,4 +51,133 @@
 .revokeButton {
     color: var(--error-color);
     font-weight: var(--font-weight-500);
+}
+
+.csvUploadSection {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    border: 1px solid var(--tertiary-600);
+    border-radius: 4px;
+    background-color: var(--white-color);
+    position: relative;
+    cursor: pointer;
+    width: 40%;
+}
+
+.csvLabel {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    pointer-events: auto;
+}
+
+.csvLabel:hover {
+    color: var(--primary-100);
+}
+
+.csvInput {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.csvUploadSection:hover {
+    border-color: var(--primary-100);
+    /* background-color: var(--tertiary-500); */
+}
+
+.attachmentIcon {
+    margin-right: 5px;
+    color: #333;
+    font-size: 16px;
+}
+
+.csvUploadSection:hover .attachmentIcon {
+    color: var(--primary-100);
+}
+
+.invitedMembersTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 1rem;
+    border-radius: 5px;
+}
+
+.invitedMembersTable th,
+.invitedMembersTable td {
+    padding: 10px 13px;
+    border: 1px solid #ddd;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.invitedMembersTable th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.invitedMembersTable tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.invitedMembersTable td button {
+    margin-right: 10px;
+}
+
+.editbtn {
+    padding: 12px 22px;
+    background: var(--primary-100);
+    color: var(--white-color);
+    font-weight: var(--font-weight-500);
+    font-size: var(--base-font);
+    border: 1px solid var(--primary-100);
+    border-radius: 8px;
+    transition: all 0.35 linear;
+    -webkit-transition: all 0.35 linear;
+    height: auto;
+    line-height: 1.1;
+    font-family: var(--Inter-family);
+    cursor: pointer;
+}
+
+.editbtn:hover {
+    background: var(--white-color) !important;
+    border-color: var(--primary-100) !important;
+    color: var(--primary-100) !important;
+}
+
+.deletebtn {
+    padding: 12px 22px;
+    font-weight: var(--font-weight-500);
+    font-size: var(--base-font);
+    border: 1px solid var(--error-color);
+    border-radius: 8px;
+    transition: all 0.35 linear;
+    -webkit-transition: all 0.35 linear;
+    height: auto;
+    line-height: 1.1;
+    font-family: var(--Inter-family);
+    cursor: pointer;
+}
+
+.deletebtn:hover {
+    background: var(--error-color) !important;
+    border-color: var(--error-color) !important;
+    color: var(--white-color) !important;
+}
+
+.pagination {
+    display: flex;
+    margin-top: 10px;
+    justify-content: flex-end;
 }
