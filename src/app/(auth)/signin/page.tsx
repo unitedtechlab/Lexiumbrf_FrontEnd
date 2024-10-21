@@ -44,7 +44,6 @@ export default function SignIn() {
 
       setLoading(false);
 
-      // Check if the request was successful
       if (response.data.success) {
         const { token, message: successMessage } = response.data.data;
         message.success(successMessage || "Signin successful.");
@@ -52,17 +51,14 @@ export default function SignIn() {
         setEmail(values.email);
         router.push("/dashboard");
       } else {
-        // Display the error message from the backend
         const errorMessage = response.data.error?.message || "Signin failed. Please try again.";
         message.error(errorMessage);
       }
     } catch (error) {
       setLoading(false);
-      // Enhanced error handling to capture backend error messages
       if (axios.isAxiosError(error) && error.response) {
         const { data } = error.response;
 
-        // Extract and display the error message
         const errorMessage = data.error?.message || "Invalid email or password";
         message.error(errorMessage);
       } else {
@@ -86,13 +82,13 @@ export default function SignIn() {
           <Col md={12} sm={24}>
             <Content
               heading="Welcome Back"
-              description="Sign in to access your data and continue leveraging the power of Bird Eye's analytics and insights."
+              description="Sign in to access your data and continue leveraging the power of Lexium BRF's analytics and insights."
             />
           </Col>
           <Col md={12} sm={24}>
             <div className={classes.loginForm}>
               <div className={classes.formHeading}>
-                <span className={classes.head}>Bird eye</span>
+                <span className={classes.head}>Lexium BRF</span>
                 <h5>Welcome Back 👋</h5>
                 <p>Enter your credentials to access your account</p>
               </div>

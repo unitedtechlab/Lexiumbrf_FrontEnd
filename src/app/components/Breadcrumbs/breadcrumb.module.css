@@ -3,7 +3,7 @@
     gap: 2px 20px;
     align-items: center;
     flex-wrap: wrap;
-    /* max-width: 32%; */
+    margin-bottom: 1rem;
 }
 
 .Breadcrumb li {
@@ -28,11 +28,15 @@
     font-family: var(--Inter-family);
 }
 
+.Breadcrumb li a:hover {
+    color: var(--primary-100);
+}
+
 .Breadcrumb li.active p {
     font-weight: var(--font-weight-600);
 }
 
 .Breadcrumb li p {
     margin: 0;
-    font-size: var(--font-sm);
+    font-size: var(--font-xs);
 }

@@ -3,7 +3,6 @@
     margin: 0 auto;
     text-align: center;
     padding-top: 20px;
-    height: calc(100% - 30px);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -19,4 +18,10 @@
 
 .dashboardWrapper {
     height: 100%;
+}
+
+.welcomeImg {
+    width: 100%;
+    max-width: 800px;
+    height: auto;
 }

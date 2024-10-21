@@ -69,13 +69,11 @@ const SignUpPage: React.FC = () => {
   };
 
   const handleGoogleSignUp = () => {
-    const googleOAuthURL = `${BaseURL}/auth/google`;
-    window.location.href = googleOAuthURL;
+    window.location.href = `${BaseURL}/users/provider-login`;
   };
 
   const handleMicrosoftSignUp = () => {
-    const microsoftOAuthURL = `${BaseURL}/auth/microsoft`;
-    window.location.href = microsoftOAuthURL;
+    window.location.href = `${BaseURL}/auth/microsoft`;
   };
 
   return (
@@ -85,13 +83,13 @@ const SignUpPage: React.FC = () => {
           <Col md={12} sm={24}>
             <Content
               heading="See your data. Clearly."
-              description="Unleash the power of your data. Lexium Brf simplifies analysis, automates reports, and delivers clear insights to empower informed decisions."
+              description="Unleash the power of your data. Lexium BRF simplifies analysis, automates reports, and delivers clear insights to empower informed decisions."
             />
           </Col>
           <Col md={12} sm={24}>
             <div className={classes.loginForm}>
               <div className={classes.formHeading}>
-                <span className={classes.head}>Lexium Brf</span>
+                <span className={classes.head}>Lexium BRF</span>
                 <h5>Get Started Now</h5>
                 <p>Sign up for free to access any of our products</p>
               </div>

@@ -1,3 +1,19 @@
 .modalBody {
     padding: 20px 0;
 }
+
+.editbtn {
+    color: var(--primary-100);
+    font-size: var(--font-sm);
+}
+
+.editFrom {
+    padding: 10px 0;
+    flex-wrap: nowrap;
+}
+
+.editFrom input {
+    border: 1px solid var(--tertiary-300);
+    padding: 6px 12px;
+    border-radius: 8px;
+}

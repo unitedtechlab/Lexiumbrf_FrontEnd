@@ -2,19 +2,23 @@ import { Button, Divider, Input, Modal, Tabs, Form, Row, Col, Upload, message } 
 import React, { useState } from 'react';
 import classes from './profile.module.css';
 import Image from "next/image";
-import user from '@/app/assets/images/user.png';  // Default user image
+import user from '@/app/assets/images/user.png';
 import { UploadOutlined } from '@ant-design/icons';
+import Link from 'next/link';
 
 const { TabPane } = Tabs;
 
 interface ProfileSettingsModalProps {
     visible: boolean;
     onClose: () => void;
+    firstName: string | null; // Add prop for first name
+    lastName: string | null;  // Add prop for last name
+    email: string | null;     // Add prop for email
 }
 
-const ProfileSettings: React.FC<ProfileSettingsModalProps> = ({ visible, onClose }) => {
+const ProfileSettings: React.FC<ProfileSettingsModalProps> = ({ visible, onClose, firstName, lastName, email }) => {
     const [activeTab, setActiveTab] = useState('general');
-    const [uploadedImage, setUploadedImage] = useState<string | null>(null);  // Store the uploaded image preview
+    const [uploadedImage, setUploadedImage] = useState<string | null>(null);
 
     const normFile = (e: any) => {
         if (Array.isArray(e)) {
@@ -23,7 +27,6 @@ const ProfileSettings: React.FC<ProfileSettingsModalProps> = ({ visible, onClose
         return e?.fileList;
     };
 
-    // Handle before upload to restrict file type
     const beforeUpload = (file: any) => {
         const isImage = file.type.startsWith('image/');
         if (!isImage) {
@@ -32,13 +35,11 @@ const ProfileSettings: React.FC<ProfileSettingsModalProps> = ({ visible, onClose
         return isImage || Upload.LIST_IGNORE;
     };
 
-    // Handle file change event to preview uploaded image
     const handleChange = (info: any) => {
         if (info.file.status === 'done') {
-            // Get the uploaded file URL and set it as the preview
             const reader = new FileReader();
             reader.onload = () => {
-                setUploadedImage(reader.result as string);  // Preview uploaded image
+                setUploadedImage(reader.result as string);
             };
             reader.readAsDataURL(info.file.originFileObj);
         }
@@ -48,27 +49,17 @@ const ProfileSettings: React.FC<ProfileSettingsModalProps> = ({ visible, onClose
         <Modal
             open={visible}
             onCancel={onClose}
-            footer={[
-                <Button key="done" type="primary" onClick={onClose} className='btn'>
-                    Done
-                </Button>,
-            ]}
+            footer={null}
             centered
         >
             <div className={classes.profileModal}>
                 <div className={classes.profileHeader}>
                     <div className={classes.profileImage}>
-                        {/* Display uploaded image or default image */}
-                        <Image
-                            src={uploadedImage || user}
-                            alt="User Profile"
-                            width={45}
-                            height={45}
-                        />
+                        <Image src={uploadedImage || user} alt="User Profile" width={45} height={45} />
                     </div>
                     <div className={classes.profileInfo}>
-                        <h5>Marci Fumons</h5>
-                        <p>@marci</p>
+                        <h6>{`${firstName || ''} ${lastName || ''}`}</h6>
+                        <p>{email || ''}</p>
                     </div>
                 </div>
                 <Divider />
@@ -85,10 +76,10 @@ const ProfileSettings: React.FC<ProfileSettingsModalProps> = ({ visible, onClose
                                     >
                                         <Row gutter={16}>
                                             <Col md={12} sm={24}>
-                                                <Input placeholder='First name' />
+                                                <Input placeholder='First name' defaultValue={firstName || ''} />
                                             </Col>
                                             <Col md={12} sm={24}>
-                                                <Input placeholder='Last name' />
+                                                <Input placeholder='Last name' defaultValue={lastName || ''} />
                                             </Col>
                                         </Row>
                                     </Form.Item>
@@ -96,11 +87,10 @@ const ProfileSettings: React.FC<ProfileSettingsModalProps> = ({ visible, onClose
                                     <Form.Item
                                         label="Email"
                                         name="email"
-                                        rules={[{ type: 'email' }]}
                                     >
                                         <Row gutter={16}>
                                             <Col md={24} sm={24}>
-                                                <Input placeholder='Email' />
+                                                <Input defaultValue={email || ''} disabled />
                                             </Col>
                                         </Row>
                                     </Form.Item>
@@ -114,13 +104,14 @@ const ProfileSettings: React.FC<ProfileSettingsModalProps> = ({ visible, onClose
                                         <Upload
                                             name="image"
                                             listType="picture"
-                                            beforeUpload={beforeUpload}  // Restrict to image files only
-                                            onChange={handleChange}     // Preview uploaded image
+                                            beforeUpload={beforeUpload}
+                                            onChange={handleChange}
                                         >
                                             <Button icon={<UploadOutlined />}>Click to upload</Button>
                                         </Upload>
                                     </Form.Item>
                                 </Form>
+                                <Button key="done" type="primary" className='btn'>Save</Button>
                             </div>
                         )}
                     </TabPane>
@@ -131,16 +122,17 @@ const ProfileSettings: React.FC<ProfileSettingsModalProps> = ({ visible, onClose
                                     <Form.Item
                                         label="Email"
                                         name="email"
-                                        rules={[{ type: 'email' }]}
                                     >
                                         <Row gutter={16}>
                                             <Col md={24} sm={24}>
-                                                <Input placeholder='marci_fu@lexium.co.in' />
+                                                <Input defaultValue={email || ''} disabled />
                                             </Col>
                                         </Row>
                                     </Form.Item>
+                                    {/* <div className={`text-right ${classes.resetlink}`}>
+                                        <Link href="/" className={classes.resetbtn}>Reset Password</Link>
+                                    </div> */}
                                     <Divider />
-
                                     <Form.Item
                                         label="Old Password"
                                         name="password"
@@ -152,7 +144,6 @@ const ProfileSettings: React.FC<ProfileSettingsModalProps> = ({ visible, onClose
                                         </Row>
                                     </Form.Item>
                                     <Divider />
-
                                     <Form.Item
                                         label="New Password"
                                         name="newpass"
@@ -167,11 +158,12 @@ const ProfileSettings: React.FC<ProfileSettingsModalProps> = ({ visible, onClose
                                         </Row>
                                     </Form.Item>
                                 </Form>
+
+                                <Button key="done" type="primary" className='btn'>Reset Password</Button>
                             </div>
                         )}
                     </TabPane>
                 </Tabs>
-
             </div>
         </Modal>
     );

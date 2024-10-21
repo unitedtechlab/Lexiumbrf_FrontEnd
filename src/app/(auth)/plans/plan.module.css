@@ -1,33 +1,66 @@
-.headerWrapper {
-    text-align: center;
-    padding: 20px;
+.logoWrapper {
+    padding: 20px 0;
+    margin-bottom: 1.5rem;
 }
 
-.headerWrapper h4 {
-    margin-bottom: 6px;
+.headerWrapper {
+    margin-bottom: 2rem;
+}
+
+.headerWrapper h2 {
+    margin: 0;
+    font-size: var(--h3-font);
+    max-width: 500px;
+    line-height: 1.2;
+}
+
+.headerWrapper p {
+    font-weight: var(--font-weight-600);
+    margin-bottom: 5px;
+    color: var(--tertiary-100);
 }
 
 .planBox {
-    text-align: center;
-    border: 1px solid var(--tertiary-400);
+    border: 1px solid var(--tertiary-300);
     border-radius: 15px;
+}
+
+.planHeading {
     padding: 30px 20px;
+    border-bottom: 1px solid var(--tertiary-300);
 }
 
-.planBox span {
+.planname {
+    justify-content: flex-start;
+    align-items: flex-end;
+    padding: 15px 0 10px;
+}
+
+.planname span {
     display: block;
+    padding-bottom: 8px;
 }
 
-.planBox h6 {
+.planHeading h6 {
     margin: 0;
 }
 
 .planBox h2 {
     margin: 0;
+    line-height: 1;
 }
 
-.planBox button {
-    margin: 15px 0;
+.buybtn {
+    width: 100%;
+    padding: 12px 20px;
+}
+
+.planDescription {
+    padding: 30px 20px;
+}
+
+.planDescription h6 {
+    margin-bottom: 0;
 }
 
 .planBox ul {

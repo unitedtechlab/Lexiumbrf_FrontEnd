@@ -5,7 +5,7 @@
     gap: 1rem;
 }
 
-.profileInfo h5 {
+.profileInfo h6 {
     margin: 0;
 }
 
@@ -18,3 +18,25 @@
 .generalTab {
     padding: 0 8px;
 }
+
+.profileImage {
+    width: 45px;
+    height: 45px;
+    border-radius: 100%;
+    overflow: hidden;
+}
+
+.profileImage img {
+    height: 100%;
+    object-fit: cover;
+}
+
+/* .resetlink {
+    padding-bottom: 15px;
+}
+
+.resetbtn {
+    color: var(--primary-100);
+    text-decoration: underline;
+    font-weight: var(--font-weight-500);
+} */

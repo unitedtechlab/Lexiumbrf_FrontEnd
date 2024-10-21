@@ -20,7 +20,7 @@ type SidebarMenuProps = {
 };
 
 const SidebarMenu = ({ collapsed, onCollapse }: SidebarMenuProps) => {
-    const [selectedKeys, setSelectedKeys] = useState<string[]>(['1']);
+    const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
 
     const sidebarItems = [
         {
@@ -53,12 +53,14 @@ const SidebarMenu = ({ collapsed, onCollapse }: SidebarMenuProps) => {
     const handleMenuClick = (key: string) => {
         setSelectedKeys([key]);
     };
-
+    const handleLogoClick = () => {
+        setSelectedKeys([]);
+    };
 
     return (
         <Sider trigger={null} collapsible collapsed={collapsed} className={sidebarStyles.sidebarMain} theme="light" width={280}>
             <div className={sidebarStyles.logo}>
-                <Link href="/dashboard">
+                <Link href="/dashboard" onClick={handleLogoClick}>
                     <Image src={collapsed ? CollapsedLogo : Logo} alt='logo image' width={collapsed ? 50 : 220} priority />
                 </Link>
             </div>
@@ -66,7 +68,6 @@ const SidebarMenu = ({ collapsed, onCollapse }: SidebarMenuProps) => {
                 className="menuSider"
                 theme="light"
                 mode="inline"
-                // defaultSelectedKeys={['1']}
                 selectedKeys={selectedKeys}
                 items={sidebarItems}
                 onClick={({ key }) => handleMenuClick(key)}

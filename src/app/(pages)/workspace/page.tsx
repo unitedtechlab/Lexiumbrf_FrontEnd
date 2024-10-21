@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styles from './workspace.module.css';
 import Searchbar from '@/app/components/Searchbar/search';
-import { Button, Dropdown, message } from 'antd';
+import { Button, Dropdown, message, Empty } from 'antd';
 import Image from "next/image";
 import User1 from '@/app/assets/images/user.jpg';
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
@@ -15,6 +15,8 @@ import CreateWorkspace from "@/app/modals/create-workspace/create-workspace";
 import EditableModal from '@/app/modals/edit-modal/edit-modal';
 import DeleteModal from '@/app/modals/delete-modal/delete-modal';
 import type { MenuProps } from 'antd';
+import BreadCrumb from "@/app/components/Breadcrumbs/breadcrumb";
+import Link from 'next/link';
 
 interface WorkspaceData {
     ID: string,
@@ -24,6 +26,7 @@ interface WorkspaceData {
     updatedAt: string
 }
 function Workspaces() {
+    const [breadcrumbs, setBreadcrumbs] = useState<{ href: string; label: string }[]>([]);
     const [searchInput, setSearchInput] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
@@ -62,6 +65,9 @@ function Workspaces() {
 
     useEffect(() => {
         fetchWorkspaceData();
+        setBreadcrumbs([
+            { href: `/dashboard`, label: `Dashboard` }
+        ]);
     }, [fetchWorkspaceData]);
 
     const handleSaveWorkspace = async (workSpaceName: string) => {
@@ -141,9 +147,6 @@ function Workspaces() {
     };
 
     const handleDelete = async (id: string) => {
-        const confirmDelete = window.confirm('Are you sure you want to delete this workspace?');
-        if (!confirmDelete) return;
-
         setLoading(true);
         try {
             const token = getToken();
@@ -189,18 +192,30 @@ function Workspaces() {
             onClick: () => handleMenuClick('role_manage'),
         },
         {
-            label: 'Details',
+            label: (
+                <span style={{ color: "orange" }}>
+                    Details
+                </span>
+            ),
             key: 'details',
         },
         {
-            label: 'Edit',
+            label: (
+                <span style={{ color: "green" }}>
+                    Edit
+                </span>
+            ),
             key: 'edit',
             onClick: () => {
                 handleEditWorkspaceName(workspace.ID);
             },
         },
         {
-            label: 'Delete',
+            label: (
+                <span style={{ color: "red" }}>
+                    Delete
+                </span>
+            ),
             key: 'delete',
             onClick: () => {
                 handleOpenDeleteModal(workspace.name, workspace.ID);
@@ -215,9 +230,10 @@ function Workspaces() {
 
     return (
         <div className={styles.workspacePage}>
+            <BreadCrumb breadcrumbs={breadcrumbs} />
             <div className={`${styles.searchView} flex justify-space-between gap-1`}>
                 <Searchbar value={searchInput} onChange={handleSearchInputChange} />
-                <Button className="btn" onClick={HandleCreateWorkspace}>Create</Button>
+                <Button className="btn" onClick={HandleCreateWorkspace}>Create Workspace</Button>
             </div>
             <div className={styles.workspaceWrapper}>
                 {Object.keys(WorkspaceData).length > 0 ? (
@@ -228,7 +244,9 @@ function Workspaces() {
                             </div>
                             <div className={styles.nameList}>
                                 <div className={`flex gap-1 ${styles.dropdownList}`}>
-                                    <h6>{workspace.name}</h6>
+                                    <h6>
+                                        <Link href={`/project/${workspace.ID}`}>{workspace.name}</Link>
+                                    </h6>
                                     <Dropdown menu={{ items: items(workspace) }} trigger={['click']}>
                                         <Button
                                             onClick={(e) => e.preventDefault()}
@@ -248,7 +266,9 @@ function Workspaces() {
                         </div>
                     ))
                 ) : (
-                    <p>No Workspace exists</p>
+                    <div className='not-found'>
+                        <Empty description="No Workspace exists" />
+                    </div>
                 )}
             </div>
             <CreateWorkspace

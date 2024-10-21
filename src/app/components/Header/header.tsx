@@ -23,8 +23,8 @@ const Header: React.FC = () => {
   const [selectedAccount, setSelectedAccount] = useState("Marci Fumons");
   const [isProfileModalVisible, setIsProfileModalVisible] = useState(false);
   const [isAccountModalVisible, setIsAccountModalVisible] = useState(false);
-  const [isEnterpriseModalVisible, setIsEnterpriseModalVisible] = useState(false); // State for EnterpriseModal
-  const [isEnterpriseLoading, setIsEnterpriseLoading] = useState(false); // State for loading
+  const [isEnterpriseModalVisible, setIsEnterpriseModalVisible] = useState(false);
+  const [isEnterpriseLoading, setIsEnterpriseLoading] = useState(false);
 
   const handleLogout = () => {
     removeToken();
@@ -47,7 +47,6 @@ const Header: React.FC = () => {
   };
 
   const handleEnterpriseSubmit = async (enterpriseName: string) => {
-    // Handle the submission of the enterprise name here
     setIsEnterpriseLoading(true);
     console.log("Enterprise created:", enterpriseName);
 
@@ -55,7 +54,7 @@ const Header: React.FC = () => {
       message.success(`Enterprise "${enterpriseName}" created successfully!`);
       setIsEnterpriseLoading(false);
       setIsEnterpriseModalVisible(false);
-    }, 1000); // Simulate server request
+    }, 1000);
   };
 
   const items: MenuProps['items'] = useMemo(() => [
@@ -72,7 +71,7 @@ const Header: React.FC = () => {
       key: "2",
     },
     {
-      label: (<a onClick={() => setIsEnterpriseModalVisible(true)}> <FaUsersCog /> Enterprise Setting </a>), // Show EnterpriseModal
+      label: (<a onClick={() => setIsEnterpriseModalVisible(true)}> <FaUsersCog /> Enterprise Setting </a>),
       key: "3",
     },
     {
@@ -137,7 +136,13 @@ const Header: React.FC = () => {
         </a>
       </Dropdown>
 
-      <ProfileSettings visible={isProfileModalVisible} onClose={() => setIsProfileModalVisible(false)} />
+      <ProfileSettings
+        visible={isProfileModalVisible}
+        onClose={() => setIsProfileModalVisible(false)}
+        firstName={first_name}
+        lastName={last_name}
+        email={email}
+      />
       <AccountSettings visible={isAccountModalVisible} onClose={() => setIsAccountModalVisible(false)} />
       <EnterpriseModal
         open={isEnterpriseModalVisible}

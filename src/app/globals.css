@@ -80,10 +80,10 @@
 }
 
 .ant-modal .ant-modal-title {
-    font-size: var(--h6-font) !important;
+    font-size: var(--font-sm) !important;
     padding-bottom: 0;
-    font-weight: 700;
-    font-family: var(--Roboto-family);
+    font-family: var(--Poppins-family);
+    font-weight: var(--font-weight-600);
 }
 
 /* ======= antd sidebar override css ========= */
@@ -277,6 +277,14 @@ ul.ant-dropdown-menu li.ant-dropdown-menu-item a svg {
     padding: 5px 10px;
 }
 
+.not-found {
+    box-shadow: 0 0 15px 2px #ebebeb;
+    width: 100%;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
 /* import data form css */
 .ant-form-item-control-input-content .forminput {
     border: 1px solid var(--tertiary-500);
@@ -345,11 +353,11 @@ ul.ant-dropdown-menu li.ant-dropdown-menu-item a svg {
 .ant-table-content table thead.ant-table-thead th.ant-table-cell {
     background: var(--tertiary-400);
     text-transform: uppercase;
-    padding: 10px 20px;
-    font-weight: 700;
+    font-weight: var(--font-weight-600);
     font-size: 13px;
     color: var(--secondary-300);
     text-align: center;
+    font-family: var(--Poppins-family);
 }
 
 .ant-table-content table tbody.ant-table-tbody {
@@ -403,12 +411,12 @@ ul.ant-dropdown-menu li.ant-dropdown-menu-item a svg {
 } */
 
 input[type="checkbox"] {
-    accent-color: var(--black-color);
+    accent-color: var(--primary-100);
 }
 
 .ant-checkbox-checked span.ant-checkbox-inner {
-    background: var(--black-color) !important;
-    border-color: var(--black-color) !important;
+    background: var(--primary-100) !important;
+    border-color: var(--primary-100) !important;
 }
 
 /* .prevalidationTable .ant-select,

@@ -23,13 +23,14 @@ export default function ForgotPassword() {
       if (response.status === 200 && response.data.success) {
         message.success("Password reset link sent to your email.");
       } else {
-        message.error(response.data.error || "Failed to send password reset link. Please try again.");
+        const errorMessage = response.data.error || "Failed to send password reset link. Please try again.";
+        message.error(typeof errorMessage === 'string' ? errorMessage : JSON.stringify(errorMessage));
       }
     } catch (error) {
       setLoading(false);
       if (axios.isAxiosError(error) && error.response) {
         const errorMessage = error.response.data.error || "An error occurred. Please try again.";
-        message.error(errorMessage);
+        message.error(typeof errorMessage === 'string' ? errorMessage : JSON.stringify(errorMessage));
       } else {
         message.error("An error occurred. Please try again.");
       }
@@ -43,14 +44,14 @@ export default function ForgotPassword() {
           <Col md={12} sm={24}>
             <Content
               heading="See your data. Clearly."
-              description="Unleash the power of your data. Bird Eye simplifies analysis, automates reports, and delivers clear insights to empower informed decisions."
+              description="Unleash the power of your data. Lexium BRF simplifies analysis, automates reports, and delivers clear insights to empower informed decisions."
             />
           </Col>
           <Col md={12} sm={24}>
             <div className={classes.loginForm}>
               <div className={classes.formHeading}>
-                <span className={classes.head}>Bird eye</span>
-                <h5>Reset Password 🔐</h5>
+                <span className={classes.head}>Lexium BRF</span>
+                <h5>Forgot Password 🔐</h5>
                 <p>
                   To verify your identity, we’ll send a verification code to
                   the following email
@@ -91,7 +92,7 @@ export default function ForgotPassword() {
                         className="btn full-width"
                         loading={loading}
                       >
-                        Next
+                        Submit
                       </Button>
                     </Form.Item>
                     <Form.Item className="mb-0">
