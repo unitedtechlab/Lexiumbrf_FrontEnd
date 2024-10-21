@@ -75,13 +75,13 @@ export default function ResetPassword() {
                     <Col md={12} sm={24}>
                         <Content
                             heading="See your data. Clearly."
-                            description="Unleash the power of your data. Bird Eye simplifies analysis, automates reports, and delivers clear insights to empower informed decisions. "
+                            description="Unleash the power of your data. Lexium BRF simplifies analysis, automates reports, and delivers clear insights to empower informed decisions. "
                         />
                     </Col>
                     <Col md={12} sm={24}>
                         <div className={classes.loginForm}>
                             <div className={classes.formHeading}>
-                                <span className={classes.head}>Bird eye</span>
+                                <span className={classes.head}>Lexium BRF</span>
                                 <h5>Set New Password 🔐</h5>
                                 <p>Please enter your new password below.</p>
                             </div>

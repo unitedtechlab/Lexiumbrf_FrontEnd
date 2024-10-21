@@ -82,13 +82,13 @@ export default function SignIn() {
           <Col md={12} sm={24}>
             <Content
               heading="Welcome Back"
-              description="Sign in to access your data and continue leveraging the power of Bird Eye's analytics and insights."
+              description="Sign in to access your data and continue leveraging the power of Lexium BRF's analytics and insights."
             />
           </Col>
           <Col md={12} sm={24}>
             <div className={classes.loginForm}>
               <div className={classes.formHeading}>
-                <span className={classes.head}>Bird eye</span>
+                <span className={classes.head}>Lexium BRF</span>
                 <h5>Welcome Back 👋</h5>
                 <p>Enter your credentials to access your account</p>
               </div>
