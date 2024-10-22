@@ -1,13 +1,15 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Col, Row, Divider, Button, message, Empty } from "antd";
+import { Col, Row, Button, message, Empty } from "antd";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { BaseURL } from "@/app/constants/index";
+import { fetchPlansAPI } from "@/app/API/api";
 import classes from "./plan.module.css";
 import Image from "next/image";
 import Logo from '@/app/assets/images/logo.png';
+import { getToken, refreshToken } from "@/utils/auth";
+import { BaseURL } from '@/app/constants/index';
 
 interface Plan {
     id: number;
@@ -29,18 +31,11 @@ export default function Plans() {
         const fetchPlans = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`${BaseURL}/plans`, {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                });
-
-                if (response.data.success) {
-                    setPlans(response.data.data.plans || []);
-                } else {
-                    setError("Failed to load plans. Please try again.");
-                }
+                const plansData = await fetchPlansAPI();
+                setPlans(plansData || []);
+                setError(null);
             } catch (error) {
+                console.error("Error fetching plans:", error);
                 setError("An error occurred while fetching plans.");
             } finally {
                 setLoading(false);
@@ -50,36 +45,47 @@ export default function Plans() {
         fetchPlans();
     }, []);
 
-    const handleOrderCreation = async (planId: number) => {
-        const token = localStorage.getItem('token'); // Adjust this to however you are storing the token
+    const handleOrderCreation = async (planId: number, price: number) => {
+        let token = getToken();
+
+        if (!token) {
+            token = await refreshToken();
+        }
+
+        if (!token) {
+            message.error("You must be logged in to place an order.");
+            router.push("/signin");
+            return;
+        }
 
         try {
             const response = await axios.post(`${BaseURL}/orders`, {
                 planID: planId,
+                amount: price,
+                status: "true",
             }, {
                 headers: {
-                    Authorization: `Bearer ${token}`, // Include the Authorization header
+                    Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",
                 },
             });
 
             if (response.data.success) {
                 message.success("Order placed successfully!");
-                router.push(`/order-success?orderId=${response.data.data.orderId}`);
+                router.push("/dashboard");
             } else {
-                message.error(response.data.error || "Failed to create order. Please try again.");
+                message.error(response.data.error.code || "Failed to create order. Please try again.");
             }
         } catch (error) {
             console.error("Order creation error:", error);
             if (axios.isAxiosError(error) && error.response) {
-                const errorMessage = error.response.data.error || "An error occurred while creating the order.";
+                const errorMessage = error.response.data.error.code || "An error occurred while creating the order.";
                 message.error(typeof errorMessage === 'string' ? errorMessage : JSON.stringify(errorMessage));
             } else {
                 message.error("An unexpected error occurred. Please try again.");
             }
         }
     };
-
 
     return (
         <div className={`${classes.planWrapper}`}>
@@ -91,6 +97,8 @@ export default function Plans() {
                     <p>Individual and Teams Plans</p>
                     <h2>Choose Your Best Plan for Your Business</h2>
                 </div>
+
+                {error && <div className="error-message">{error}</div>}
 
                 <Row gutter={16}>
                     {plans.length > 0 ? (
@@ -106,7 +114,8 @@ export default function Plans() {
                                         <p>Basic features for up to {plan.users_limit} user{plan.users_limit > 1 ? 's' : ''}</p>
                                         <Button
                                             className={`btn ${classes.buybtn}`}
-                                            onClick={() => handleOrderCreation(plan.id)} // Handle order creation
+                                            onClick={() => handleOrderCreation(plan.id, plan.price)}
+                                            disabled={loading}
                                         >
                                             Buy Now
                                         </Button>
@@ -127,9 +136,11 @@ export default function Plans() {
                             </Col>
                         ))
                     ) : (
-                        <div className='not-found'>
-                            <Empty description="No Plans Available" />
-                        </div>
+                        !loading && (
+                            <div className="not-found">
+                                <Empty description="No Plans Available" />
+                            </div>
+                        )
                     )}
                 </Row>
             </div>

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from 'react';
 import { Col, Row, Form, Input, Button, message } from 'antd';
 import Content from '@/app/components/AuthContent/content';
@@ -8,7 +8,6 @@ import { useRouter } from 'next/navigation';
 import { useEmail } from '@/app/context/emailContext';
 import { setToken } from "@/utils/auth";
 import axios from 'axios';
-
 
 interface OTPFormValues {
     otp: string;
@@ -31,11 +30,19 @@ const OTPPage: React.FC = () => {
                     },
                 });
 
+            console.log("OTP verification response:", response.data);
             setLoading(false);
-            if (response.status === 200) {
-                message.success(response.data.mesage || 'OTP verified successfully. Redirecting to dashboard...');
-                setToken(response.data.token);
-                router.push('/plans');
+
+            if (response.status === 200 && response.data.success) {
+                const token = response.data.data.token;
+                if (token) {
+                    message.success(response.data.message || 'OTP verified successfully. Redirecting to Plans...');
+                    setToken(token);
+                    router.push('/plans');
+                } else {
+                    message.error('Token is missing in the response. Please try again.');
+                    console.error('No token found in the response.');
+                }
             } else {
                 message.error(response.data.error || 'OTP verification failed. Please try again.');
             }
@@ -44,10 +51,11 @@ const OTPPage: React.FC = () => {
             if (axios.isAxiosError(error) && error.response) {
                 const errorMessage = error.response.data.error || 'An error occurred while verifying OTP. Please try again.';
                 message.error(errorMessage);
+                console.error("Error response:", error.response);
             } else {
                 message.error('An error occurred. Please try again.');
             }
-            console.error('Error:', error);
+            console.error('Error during OTP verification:', error);
         }
     };
 
@@ -65,7 +73,7 @@ const OTPPage: React.FC = () => {
             setLoading(false);
 
             if (response.status === 200) {
-                message.success(response.data.mesage || 'OTP resent successfully. Please check your email.');
+                message.success(response.data.message || 'OTP resent successfully. Please check your email.');
             } else {
                 message.error(response.data.error || 'Failed to resend OTP. Please try again.');
             }
@@ -77,10 +85,9 @@ const OTPPage: React.FC = () => {
             } else {
                 message.error('An error occurred. Please try again.');
             }
-            console.error('Error:', error);
+            console.error('Error during OTP resend:', error);
         }
     };
-
 
     return (
         <div className={`${classes.loginWrapper} flex`}>

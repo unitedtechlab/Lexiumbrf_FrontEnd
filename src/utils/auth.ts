@@ -1,4 +1,6 @@
 import { TOKEN_KEY } from '@/app/constants/index';
+import axios from 'axios';
+import { BaseURL } from "@/app/constants/index";
 
 export const setToken = (token: string) => {
     if (typeof window !== 'undefined') {
@@ -6,12 +8,15 @@ export const setToken = (token: string) => {
     }
 };
 
+
 export const getToken = () => {
     if (typeof window !== 'undefined') {
-        return localStorage.getItem(TOKEN_KEY);
+        const token = localStorage.getItem(TOKEN_KEY);
+        return token;
     }
     return null;
 };
+
 
 export const removeToken = () => {
     if (typeof window !== 'undefined') {
@@ -33,3 +38,22 @@ export const decodeToken = (token: string) => {
 };
 
 export const isBrowser = () => typeof window !== 'undefined';
+
+// Function to refresh the token
+export const refreshToken = async () => {
+    try {
+        const response = await axios.get(`${BaseURL}/latest_token`, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (response.data.token) {
+            setToken(response.data.token);
+            return response.data.token;
+        }
+    } catch (error) {
+        console.error("Error refreshing token:", error);
+    }
+    return null;
+};

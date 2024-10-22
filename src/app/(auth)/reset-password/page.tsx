@@ -33,23 +33,17 @@ export default function ResetPassword() {
 
     const handleResetPassword = async (values: { new_password: string }) => {
         try {
-            if (!token) {
-                throw new Error("No token found.");
-            }
-
             setLoading(true);
             const response = await axios.post(`${BaseURL}/users/reset-password`, {
                 new_password: values.new_password,
                 email: emailFromToken,
             }, {
                 headers: {
-                    "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`,
                 }
             });
 
             setLoading(false);
-
             if (response.status === 200) {
                 message.success(response.data.message || "Password reset successfully.");
                 router.push("/signin");
@@ -58,14 +52,10 @@ export default function ResetPassword() {
             }
         } catch (error) {
             setLoading(false);
-            if (axios.isAxiosError(error) && error.response) {
-                const errorMessage = error.response.data.error || "An error occurred. Please try again.";
-                message.error(errorMessage);
-            } else {
-                message.error("An error occurred. Please try again.");
-            }
+            message.error("An error occurred. Please try again.");
         }
     };
+
 
 
     return (
