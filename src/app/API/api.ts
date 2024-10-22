@@ -155,9 +155,9 @@ export const fetchOrdersByUser = async (token: string) => {
         // Log the full response for debugging
         console.log("Full order response:", response);
 
-        if (response.data && response.data.data && Array.isArray(response.data.data)) {
-            console.log("Order data:", response.data.data); // Log order data
-            return response.data.data; // Return the orders array
+        if (response.data && response.data.data && Array.isArray(response.data.data.data)) {
+            console.log("Order data:", response.data.data.data); // Log order data
+            return response.data.data.data; // Return the orders array
         } else {
             console.error("Unexpected response structure:", response.data);
             return null;
