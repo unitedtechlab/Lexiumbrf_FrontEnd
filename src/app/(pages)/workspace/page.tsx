@@ -296,7 +296,7 @@ function Workspaces() {
             />
             <RoleManagementModal
                 isModalOpen={isRoleModalOpen}
-                onClose={() => setIsRoleModalOpen(false)}
+                onClose={() => setIsRoleModalOpen(false)}  workspaceId={currentWorkspaceId!}              
             />
 
         </div>

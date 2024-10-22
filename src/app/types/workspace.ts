@@ -10,4 +10,5 @@ export interface RoleData {
 export interface RoleManagementModalProps {
     isModalOpen: boolean;
     onClose: () => void;
+    workspaceId: string | null;
 }

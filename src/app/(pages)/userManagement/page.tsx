@@ -53,6 +53,7 @@ const UserSettings: React.FC<UserSettingsModalProps> = ({ }) => {
                 accountID: users[key].AccountID,
             }));
             setInvitedUsers(userList);
+            // localStorage.setItem('invitedUsers', JSON.stringify(userList));
         } catch (error) {
             console.error('Error fetching invited users:', error);
         }
@@ -92,7 +93,7 @@ const UserSettings: React.FC<UserSettingsModalProps> = ({ }) => {
             message.success(`Invite sent successfully to ${member}!`);
             const newUser = {
                 username: member,
-                inviteStatus: 'NOT_REGISTERED',
+                inviteStatus: response.data?.inviteStatus,
                 userID: response.data?.userID,
                 accountID: response.data?.accountID,
             };
