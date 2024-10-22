@@ -1,9 +1,9 @@
-// planUtils.ts
-import { getToken } from "@/utils/auth";
-import axios from "axios";
-import { BaseURL } from "@/app/constants/index";
+import axios from 'axios';
+import { BaseURL } from '@/app/constants/index';
+import { getToken, refreshToken } from '@/utils/auth';
 
-// Define a type for plans
+let cachedPlan: Plan | null = null;
+
 export interface Plan {
     id: number;
     name: string;
@@ -16,14 +16,23 @@ export interface Plan {
     updated_at: string;
 }
 
-// Fetch the current user's plan information
+// Function to fetch and cache the user’s plan
 export const fetchUserPlan = async (): Promise<Plan | null> => {
+    if (cachedPlan) {
+        return cachedPlan;
+    }
+
     try {
-        const token = getToken();
+        let token = getToken();
         if (!token) {
-            throw new Error("No token found, please log in.");
+            token = await refreshToken();
         }
 
+        if (!token) {
+            throw new Error('No token found. Please log in.');
+        }
+
+        // Make sure you are hitting the correct endpoint to fetch the user's plan
         const response = await axios.get(`${BaseURL}/plans`, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -31,19 +40,19 @@ export const fetchUserPlan = async (): Promise<Plan | null> => {
             },
         });
 
-        if (response.data && response.data.success) {
-            return response.data.data.plan; // Assuming the API returns the user's current plan
+        if (response.data && response.data.success && response.data.data) {
+            cachedPlan = response.data.data.plan;
+            return cachedPlan;
         } else {
-            console.error("Failed to fetch user plan:", response.data.error);
+            console.error('Failed to fetch user plan:', response.data.error);
             return null;
         }
     } catch (error) {
-        console.error("Error fetching user plan:", error);
+        console.error('Error fetching user plan:', error);
         return null;
     }
 };
 
-// Check if the user has access to a specific feature based on their plan ID
-export const hasAccessToFeature = (planId: number, requiredPlanId: number): boolean => {
-    return planId === requiredPlanId;
+export const clearCachedPlan = () => {
+    cachedPlan = null;
 };

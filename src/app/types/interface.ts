@@ -20,8 +20,8 @@ export interface Enterprise {
   updatedAt: string;
 }
 
-// The response structure when fetching enterprises
 export interface EnterpriseResponse {
   success: boolean;
-  data: Enterprise[];
+  data?: Enterprise[];
+  error?: string;
 }
