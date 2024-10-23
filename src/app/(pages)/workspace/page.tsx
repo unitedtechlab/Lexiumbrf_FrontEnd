@@ -34,7 +34,7 @@ function Workspaces() {
     const [loading, setLoading] = useState<boolean>(false);
     const [WorkspaceData, setWorkspaceData] = useState<{ [key: string]: WorkspaceData }>({});
     const [workspaceName, setWorkspaceName] = useState<string>("");
-    const [currentWorkspaceId, setCurrentWorkspaceId] = useState<string | null>(null);
+    const [currentWorkspaceId, setCurrentWorkspaceId] = useState<string >("");
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [entityToDelete, setEntityToDelete] = useState({ name: '', id: '' });
 
@@ -163,7 +163,7 @@ function Workspaces() {
                     delete updatedData[id];
                     return updatedData;
                 });
-                setCurrentWorkspaceId(null);
+                setCurrentWorkspaceId("");
             }
         } catch (error) {
             message.error('Failed to delete workspace.');
@@ -246,6 +246,7 @@ function Workspaces() {
                                 <div className={`flex gap-1 ${styles.dropdownList}`}>
                                     <h6>
                                         <Link href={`/project/${workspace.ID}`}>{workspace.name}</Link>
+                                        {/* <Link href={`/project/${workspace.name.replace(/\s+/g, '_')}`}>{workspace.name}</Link> */}
                                     </h6>
                                     <Dropdown menu={{ items: items(workspace) }} trigger={['click']}>
                                         <Button
@@ -275,7 +276,7 @@ function Workspaces() {
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
                 workSpace=""
-                onSave={handleSaveWorkspace} name={'Workspace'} />
+                onSave={handleSaveWorkspace} name={'Workspace'} workspaceId={currentWorkspaceId}/>
 
             <EditableModal open={isEditModalOpen}
                 title="Edit Workspace"
