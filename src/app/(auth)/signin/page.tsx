@@ -50,6 +50,9 @@ export default function SignIn() {
         setToken(token);
         setEmail(values.email);
         router.push("/dashboard");
+
+        console.log("login token:", token);
+
       } else {
         const errorMessage = response.data.error?.message || "Signin failed. Please try again.";
         message.error(errorMessage);

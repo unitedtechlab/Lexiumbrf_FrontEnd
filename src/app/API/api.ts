@@ -2,15 +2,21 @@ import axios from 'axios';
 import { BaseURL } from '@/app/constants/index';
 import { getToken, refreshToken } from '@/utils/auth';
 import { Enterprise, EnterpriseResponse } from '@/app/types/interface';
+import { message } from 'antd';
 
 const getAuthHeaders = async () => {
-    let token = getToken();
+    // let token = getToken();
 
-    // Refresh token if it's invalid or missing
+    // // Refresh token if it's invalid or missing
+    // if (!token) {
+    //     token = await refreshToken();
+    // }
+
+    let token = await refreshToken();
     if (!token) {
-        token = await refreshToken();
+        message.error("Failed to refresh token. Please log in again.");
+        return;
     }
-
     return {
         'Content-Type': 'application/json',
         ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
@@ -23,9 +29,9 @@ export const fetchEnterprisesAPI = async (): Promise<EnterpriseResponse | null> 
     try {
         const headers = await getAuthHeaders();
 
-        if (!headers['Authorization']) {
-            throw new Error('No token found, please log in.');
-        }
+        // if (!headers['Authorization']) {
+        //     throw new Error('No token found, please log in.');
+        // }
 
         const response = await axios.get(`${BaseURL}/enterprises?account-type=Enterprise`, {
             headers,
@@ -76,9 +82,9 @@ export const createEnterpriseAPI = async (enterpriseName: string): Promise<any> 
     try {
         const headers = await getAuthHeaders();
 
-        if (!headers['Authorization']) {
-            throw new Error('No token found, please log in.');
-        }
+        // if (!headers['Authorization']) {
+        //     throw new Error('No token found, please log in.');
+        // }
 
         const response = await axios.post(
             `${BaseURL}/enterprises?account-type=Enterprise`,
@@ -99,9 +105,9 @@ export const editEnterpriseAPI = async (enterprise: Enterprise): Promise<any> =>
     try {
         const headers = await getAuthHeaders();
 
-        if (!headers['Authorization']) {
-            throw new Error('No token found, please log in.');
-        }
+        // if (!headers['Authorization']) {
+        //     throw new Error('No token found, please log in.');
+        // }
 
         const response = await axios.put(
             `${BaseURL}/enterprises?account-type=Enterprise`,
@@ -152,12 +158,8 @@ export const fetchOrdersByUser = async (token: string) => {
             },
         });
 
-        // Log the full response for debugging
-        console.log("Full order response:", response);
-
         if (response.data && response.data.data && Array.isArray(response.data.data.data)) {
-            console.log("Order data:", response.data.data.data); // Log order data
-            return response.data.data.data; // Return the orders array
+            return response.data.data.data;
         } else {
             console.error("Unexpected response structure:", response.data);
             return null;

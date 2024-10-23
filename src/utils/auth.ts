@@ -42,18 +42,29 @@ export const isBrowser = () => typeof window !== 'undefined';
 // Function to refresh the token
 export const refreshToken = async () => {
     try {
+        const currentToken = getToken();
+        if (!currentToken) {
+            console.error("No current token found in localStorage.");
+            return null;
+        }
+
         const response = await axios.get(`${BaseURL}/latest_token`, {
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": `Bearer ${currentToken}`,
             },
         });
 
-        if (response.data.token) {
-            setToken(response.data.token);
-            return response.data.token;
+        if (response.data && response.data.data && response.data.data.token) {
+            const newToken = response.data.data.token;
+            setToken(newToken);
+            return newToken;
+        } else {
+            console.error("Failed to refresh token: No token in response.");
+            return null;
         }
     } catch (error) {
         console.error("Error refreshing token:", error);
+        return null;
     }
-    return null;
 };

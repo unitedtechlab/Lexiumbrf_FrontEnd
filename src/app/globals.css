@@ -9,11 +9,12 @@
 
 .ant-form-item-control-input-content .ant-input-outlined {
     border: 1px solid var(--tertiary-300);
-    padding: 10px 14px;
+    padding: 6px 14px;
     line-height: 1;
     border-radius: 12px;
     color: var(--tertiary-100);
     font-size: var(--font-sm);
+    min-height: 40px;
 }
 
 .ant-form-item-control-input-content .ant-select-selector {
@@ -24,6 +25,7 @@
     color: var(--tertiary-100);
     font-size: var(--font-sm);
     height: auto !important;
+    min-height: 40px;
 }
 
 .ant-select.ant-select-outlined.ant-select-in-form-item {
