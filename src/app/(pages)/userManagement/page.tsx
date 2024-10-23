@@ -1,23 +1,177 @@
 "use client";
 
-import { Button, Divider, Select, Modal, Tag, Avatar } from 'antd';
-import React, { useState } from 'react';
+import { Button, Divider, Input, Tag, Avatar, List, message, Pagination } from 'antd';
+import axios from 'axios';
+import React, { useState, useEffect, useCallback } from 'react';
 import classes from './user.module.css';
 import Image from "next/image";
 import userImage from "@/app/assets/images/user.png";
+import { BaseURL } from '@/app/constants';
+import { getToken } from '@/utils/auth';
+import { AiOutlinePaperClip } from 'react-icons/ai';
+import Papa from 'papaparse';
 
 interface UserSettingsModalProps {
     visible: boolean;
     onClose: () => void;
 }
 
-const UserSettings: React.FC<UserSettingsModalProps> = ({ visible, onClose }) => {
+interface InvitedUser {
+    username: string;
+    inviteStatus: string;
+    userID: number;
+    accountID: number;
+}
+
+const UserSettings: React.FC<UserSettingsModalProps> = ({ }) => {
     const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
-    const memberOptions = [
-        { value: 'Richard', label: 'Richard', avatar: userImage, status: "Accepted", },
-        { value: 'Sophia', label: 'Sophia', avatar: userImage, status: "Rejected", },
-        { value: 'Ryan', label: 'Ryan', avatar: userImage, status: "Invite Sent", },
-    ];
+    const [memberInput, setMemberInput] = useState<string>('');
+    const [invitedUsers, setInvitedUsers] = useState<InvitedUser[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(3);
+
+    const startIndex = (currentPage - 1) * pageSize;
+    const paginatedUsers = invitedUsers.slice(startIndex, startIndex + pageSize);
+ console.log("invitedUsers", invitedUsers)
+    const fetchInvitedUsers = async () => {
+        try {
+            const token = getToken();
+            if (!token) {
+                throw new Error('No token found, please login.');
+            }
+            const response = await axios.get(`${BaseURL}/enterprise_users?account-type=Enterprise`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                },
+            });
+
+            const users = response.data.data;
+            const userList = Object.keys(users).map(key => ({
+                username: key,
+                inviteStatus: users[key].InviteStatus,
+                userID: users[key].UserID,
+                accountID: users[key].AccountID,
+            }));
+            setInvitedUsers(userList);
+            // localStorage.setItem('invitedUsers', JSON.stringify(userList));
+        } catch (error) {
+            console.error('Error fetching invited users:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchInvitedUsers();
+    }, []);
+
+    const isUserInvited = (username: string): boolean => {
+        return invitedUsers.some(user => user.username === username);
+    };
+
+    const sendInvite = async (member: string) => {
+        if (isUserInvited(member)) {
+            message.info(`User ${member} has already been invited.`);
+            return;
+        }
+
+        try {
+            const token = getToken();
+            if (!token) {
+                throw new Error('No token found, please login.');
+            }
+
+            const response = await axios.post(
+                `${BaseURL}/enterprise_users?account-type=Enterprise`,
+                { emails: [member] },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`,
+                    },
+                }
+            );
+
+            message.success(`Invite sent successfully to ${member}!`);
+            const newUser = {
+                username: member,
+                inviteStatus: response.data?.inviteStatus,
+                userID: response.data?.userID,
+                accountID: response.data?.accountID,
+            };
+
+            setInvitedUsers(prevUsers => [...prevUsers, newUser]);
+            setMemberInput('');
+            fetchInvitedUsers();
+        } catch (error) {
+            // message.error(`Failed to send invite to ${member}.`);
+            console.error('Error:', error);
+        }
+    };
+
+    const deleteInvitedUser = async (userID: number) => {
+        try {
+            const token = getToken();
+            if (!token) {
+                throw new Error('No token found, please login.');
+            }
+            await axios.delete(`${BaseURL}/enterprise_users?account-type=Enterprise&userID=${userID}`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                },
+            });
+            setInvitedUsers(prevUsers => prevUsers.filter(user => user.userID !== userID));
+            message.success(`User deleted successfully!`);
+            fetchInvitedUsers();
+        } catch (error) {
+            // message.error('Failed to delete user.');
+            console.error('Error deleting user:', error);
+        }
+    };
+
+    const handleCSVUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            Papa.parse(file, {
+                complete: (result: { data: string[][]; }) => {
+                    const csvData = result.data as string[][];
+                    const usernames = csvData.map((row) => row[0]);
+                    usernames.forEach(username => sendInvite(username));
+                },
+                header: false,
+            });
+        }
+    };
+
+    const editInvitedUser = async (userID: number, inviteResponse: string) => {
+        try {
+            const token = getToken();
+            if (!token) {
+                throw new Error('No token found, please login.');
+            }
+
+            const data = {
+                inviteResponse: inviteResponse,
+                accountID: userID,
+            };
+
+            const response = await axios.put(`${BaseURL}/enterprise_users`, data, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+            });
+
+            message.success('User invite response updated successfully!');
+            setInvitedUsers(prevUsers =>
+                prevUsers.map(user =>
+                    user.userID === userID ? { ...user, inviteStatus: inviteResponse } : user
+                )
+            );
+
+        } catch (error) {
+            // message.error('Failed to update invite response.');
+            console.error('Error editing user:', error);
+        }
+    };
 
     return (
         <div className={classes.userSettingModal}>
@@ -32,55 +186,74 @@ const UserSettings: React.FC<UserSettingsModalProps> = ({ visible, onClose }) =>
                     <h6>Manage members</h6>
                     <p>To manage administrators, upgrade to enterprise pro plan.</p>
                 </div>
-                <Button className={classes.upgradeButton}>Upgrade plan</Button>
+                {/* <Button className={` ${classes.upgradeButton}`}>Upgrade plan</Button> */}
             </div>
 
             <div className={`flex gap-1 ${classes.inviteInputSection}`}>
-                <div className={`select-custom ${classes.selectField}`}>
-                    <Select
-                        mode="multiple"
+                <div className={`selectCustom ${classes.selectField}`}>
+                    <Input
                         placeholder="Add members by username"
-                        value={selectedMembers}
-                        onChange={setSelectedMembers}
-                        optionLabelProp="label"
-                        className={classes.memberSelect}
-                    >
-                        {memberOptions.map((option) => (
-                            <Select.Option key={option.value} value={option.value} label={option.label}>
-                                <div className={`flex gap-1 ${classes.options}`}>
-                                    <div className={`flex gap-1 ${classes.optionsName}`}>
-                                        <Image src={option.avatar} alt={option.label} width={38} height={38} />
-                                        <div className={classes.selectlist}>
-                                            <h6>{option.label}</h6>
-                                            <span>@{option.value.toLowerCase()}</span>
-                                        </div>
-                                    </div>
-                                    <div className={`flex ${classes.optionBtns}`}>
-                                        <Tag color={
-                                            option.status === "Accepted"
-                                                ? "green"
-                                                : option.status === "Rejected"
-                                                    ? "red"
-                                                    : "orange"
-                                        }>
-                                            {option.status}
-                                        </Tag>
-                                        <Button type="link" className={classes.revokeButton}>Revoke</Button>
-                                    </div>
-                                </div>
-                            </Select.Option>
-                        ))}
-                    </Select>
+                        value={memberInput}
+                        onChange={(e) => setMemberInput(e.target.value)}
+                        onPressEnter={() => sendInvite(memberInput)}
+                    />
                 </div>
-                <div className='flex gap-1 no-wrap'>
-                    <Button type="primary" className={`btn btn-outline ${classes.inviteBtn}`}>
-                        Add Users
-                    </Button>
-                    <Button type="primary" className={`btn ${classes.inviteBtn}`}>
-                        Send Invite
-                    </Button>
+                <div className={classes.csvUploadSection}>
+                    <label htmlFor="csvUpload" className={classes.csvLabel}>
+                        <AiOutlinePaperClip className={classes.attachmentIcon} />
+                        Invite by Email (Multiple users by uploading CSV)
+                        <input id="csvUpload" type="file" accept=".csv" onChange={handleCSVUpload} className={classes.csvInput} />
+                    </label>
                 </div>
+                <Button type="primary" className={`btn btn-outline ${classes.inviteBtn}`} onClick={() => sendInvite(memberInput)}>
+                    Invite User
+                </Button>
             </div>
+
+            <Divider />
+
+            <h5>Invited Members</h5>
+            <table className={classes.invitedMembersTable}>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Invite Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {paginatedUsers.map((user) => (
+                        <tr key={user.userID}>
+                            <td>{user.username}</td>
+                            <td>
+                                <Tag color={user.inviteStatus === 'NOT_REGISTERED' ? 'orange' : 'green'}>
+                                    {user.inviteStatus}
+                                </Tag>
+                            </td>
+                            <td>
+                                <Button className={classes.deletebtn} type="link" danger onClick={() => deleteInvitedUser(user.userID)}>
+                                    Delete
+                                </Button>
+                                {/* <Button className={classes.editbtn} onClick={() => editInvitedUser(user.userID, 'true')}>Edit Invite</Button> */}
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+
+            </table>
+
+            <Pagination
+                current={currentPage}
+                pageSize={pageSize}
+                total={invitedUsers.length}
+                onChange={(page, pageSize) => {
+                    setCurrentPage(page);
+                    setPageSize(pageSize);
+                }}
+                showSizeChanger
+                showQuickJumper
+                className={classes.pagination}
+            />
         </div>
     );
 };

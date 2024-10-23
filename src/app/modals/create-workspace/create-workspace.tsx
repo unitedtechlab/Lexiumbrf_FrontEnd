@@ -9,7 +9,8 @@ interface CreateWorkspaceProps {
     isModalOpen: boolean;
     setIsModalOpen: (isOpen: boolean) => void;
     workSpace: string;
-    onSave: (workspaceName: string) => void;
+    onSave: (workspaceName: string, anotherValue: string) => void;
+    workspaceId: string ;
 }
 
 const { Option } = Select;
@@ -20,19 +21,21 @@ const users = [
     { id: 3, name: 'Drew Cano', username: '@drew', role: 'User', avatar: 'img/avatar3' },
 ];
 
-const CreateWorkspace: React.FC<CreateWorkspaceProps> = ({ isModalOpen, setIsModalOpen, workSpace, onSave, name }) => {
+const CreateWorkspace: React.FC<CreateWorkspaceProps> = ({ isModalOpen, setIsModalOpen, workSpace, onSave, name, workspaceId }) => {
     const [workspaceName, setWorkspaceName] = useState("");
     const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
+    const [anotherValue, setAnotherValue] = useState<string>("");
     const [form] = Form.useForm();
-
+    console.log("workspaceId", workspaceId)
     const handleOk = () => {
         if (!workspaceName.trim()) {
             message.error(`${name} name cannot be empty!`);
             return;
         }
 
-        onSave(workspaceName);
+        onSave(workspaceName, anotherValue);
         setIsModalOpen(false);
+        setAnotherValue(workspaceId)
     };
 
     const handleCancel = () => {

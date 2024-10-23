@@ -3,7 +3,7 @@ import { Modal, Checkbox, Button, Table, Divider } from 'antd';
 import styles from './RoleManagementModal.module.css';
 import { RoleData, RoleManagementModalProps } from '@/app/types/workspace';
 
-const RoleManagementModal: React.FC<RoleManagementModalProps> = ({ isModalOpen, onClose }) => {
+const RoleManagementModal: React.FC<RoleManagementModalProps> = ({ isModalOpen, onClose, workspaceId }) => {
   const [dataSource, setDataSource] = useState<RoleData[]>([
     {
       key: '1',
