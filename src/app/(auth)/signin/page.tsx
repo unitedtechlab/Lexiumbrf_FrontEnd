@@ -140,6 +140,13 @@ export default function SignIn() {
       message.error("An error occurred while signing in. Please try again.");
     }
   };
+  const handleGoogleSignIn = () => {
+    window.location.href = `${BaseURL}/users/provider-login`;
+  };
+
+  const handleMicrosoftSignIn = () => {
+    window.location.href = `${BaseURL}/auth/microsoft`;
+  };
 
   return (
     <div className={`${classes.loginWrapper} flex`}>
@@ -161,7 +168,7 @@ export default function SignIn() {
               <div className={`flex ${classes.googleMicrosoft}`}>
                 <Button
                   className={classes.btnGoogle}
-                  onClick={() => (window.location.href = `${BaseURL}/users/provider-login`)}
+                  onClick={handleGoogleSignIn}
                 >
                   <Image
                     src={GoogleImg}
@@ -174,7 +181,7 @@ export default function SignIn() {
                 </Button>
                 <Button
                   className={classes.btnGoogle}
-                  onClick={() => (window.location.href = `${BaseURL}/auth/microsoft`)}
+                  onClick={handleMicrosoftSignIn}
                 >
                   <Image
                     src={MicrosoftImg}
