@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Col, Row, Form, Input, Button, message, Modal, Divider, Tabs, Upload } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { Col, Row, Form, Input, Button, message, Modal, Divider, Tabs } from "antd";
 import axios from "axios";
 import { BaseURL } from "@/app/constants/index";
-import { getToken, refreshToken, decodeToken } from "@/utils/auth";
+import { getAuthHeaders, decodeToken, refreshToken, getToken } from "@/utils/auth";
+import { useEmail } from "@/app/context/emailContext";
 import classes from "./profile.module.css";
 import user from "@/app/assets/images/user.png";
 import Image from "next/image";
@@ -18,12 +18,14 @@ interface ProfileSettingsModalProps {
     email: string | null;
 }
 
-const ProfileSettings: React.FC<ProfileSettingsModalProps> = ({ visible, onClose, firstName, lastName, email }) => {
+const ProfileSettings: React.FC<ProfileSettingsModalProps> = ({ visible, onClose, firstName: initialFirstName, lastName: initialLastName, email }) => {
+    const { setFirstName, setLastName } = useEmail();
     const [activeTab, setActiveTab] = useState("general");
-    const [uploadedImage, setUploadedImage] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [generalForm] = Form.useForm();
     const [securityForm] = Form.useForm();
+    const [firstName, setLocalFirstName] = useState<string | null>(initialFirstName || null);
+    const [lastName, setLocalLastName] = useState<string | null>(initialLastName || null);
     const [emailFromToken, setEmailFromToken] = useState<string | null>(email || null);
 
     useEffect(() => {
@@ -38,41 +40,40 @@ const ProfileSettings: React.FC<ProfileSettingsModalProps> = ({ visible, onClose
         }
     }, [generalForm]);
 
-    // Handler for updating name
+    // Handler for updating name using getAuthHeaders
     const handleUpdateName = async (values: { firstName: string; lastName: string }) => {
         try {
             setLoading(true);
-            const token = await refreshToken();
-            if (!token) {
-                message.error("Failed to refresh token. Please log in again.");
-                return;
-            }
 
+            const headers = await getAuthHeaders();
             const response = await axios.post(
                 `${BaseURL}/users/update-name`,
                 {
                     FirstName: values.firstName,
                     LastName: values.lastName,
                 },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
+                { headers }
             );
 
-            setLoading(false);
             if (response.status === 200) {
                 message.success(response.data.message || "Name updated successfully.");
 
-                console.log(response.data, "token profile")
+                const refreshedToken = await refreshToken();
+                if (refreshedToken) {
+                    const decodedToken = decodeToken(refreshedToken);
+                    setFirstName(decodedToken?.firstName || values.firstName);
+                    setLastName(decodedToken?.lastName || values.lastName);
+                }
+
                 onClose();
             } else {
                 message.error(response.data.error || "Failed to update name. Please try again.");
             }
         } catch (error) {
+            message.error("An error occurred while updating the name.");
+            console.error("Error updating name:", error);
+        } finally {
             setLoading(false);
-            message.error("An error occurred while updating name.");
         }
     };
 
@@ -91,7 +92,7 @@ const ProfileSettings: React.FC<ProfileSettingsModalProps> = ({ visible, onClose
                 {
                     old_password: values.password,
                     new_password: values.newpass,
-                    profileReset: true, // This is sent from the profile page
+                    profileReset: true,
                 },
                 {
                     headers: {
@@ -99,8 +100,6 @@ const ProfileSettings: React.FC<ProfileSettingsModalProps> = ({ visible, onClose
                     },
                 }
             );
-
-            console.log("Response from reset-password API:", response);
 
             setLoading(false);
             if (response.status === 200) {
@@ -121,9 +120,19 @@ const ProfileSettings: React.FC<ProfileSettingsModalProps> = ({ visible, onClose
             label: "General",
             children: (
                 <div className={classes.generalTab}>
-                    <Form form={generalForm} name="general" onFinish={handleUpdateName} layout="vertical">
+                    <Form
+                        form={generalForm}
+                        name="general"
+                        onFinish={handleUpdateName}
+                        layout="vertical"
+                        initialValues={{
+                            email: email || emailFromToken,
+                            firstName: firstName || "",
+                            lastName: lastName || ""
+                        }}
+                    >
                         <Form.Item label="Email" name="email">
-                            <Input defaultValue={email || emailFromToken || ""} disabled />
+                            <Input disabled />
                         </Form.Item>
                         <Form.Item
                             label="Name"
@@ -132,13 +141,13 @@ const ProfileSettings: React.FC<ProfileSettingsModalProps> = ({ visible, onClose
                         >
                             <Row gutter={16}>
                                 <Col md={12} sm={24}>
-                                    <Form.Item name="firstName">
-                                        <Input placeholder="First name" defaultValue={firstName || ""} />
+                                    <Form.Item name="firstName" rules={[{ required: true, message: "First name is required!" }]}>
+                                        <Input placeholder="First name" />
                                     </Form.Item>
                                 </Col>
                                 <Col md={12} sm={24}>
-                                    <Form.Item name="lastName">
-                                        <Input placeholder="Last name" defaultValue={lastName || ""} />
+                                    <Form.Item name="lastName" rules={[{ required: true, message: "Last name is required!" }]}>
+                                        <Input placeholder="Last name" />
                                     </Form.Item>
                                 </Col>
                             </Row>
@@ -217,7 +226,7 @@ const ProfileSettings: React.FC<ProfileSettingsModalProps> = ({ visible, onClose
             <div className={classes.profileModal}>
                 <div className={classes.profileHeader}>
                     <div className={classes.profileImage}>
-                        <Image src={uploadedImage || user} alt="User Profile" width={45} height={45} />
+                        <Image src={user} alt="User Profile" width={45} height={45} />
                     </div>
                     <div className={classes.profileInfo}>
                         <h6>{`${firstName || ""} ${lastName || ""}`}</h6>
