@@ -25,3 +25,9 @@
     max-width: 800px;
     height: auto;
 }
+
+@media screen and (max-width: 1699px) {
+    .welcomeImg {
+        max-width: 650px;
+    }
+}
