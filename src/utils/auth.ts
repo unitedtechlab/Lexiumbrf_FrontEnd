@@ -43,12 +43,12 @@ export const isValidToken = (token: string) => {
 };
 
 // Function to refresh the token 
-export const refreshToken = async (): Promise<string | null> => {
+export const refreshToken = async (): Promise<string> => {
     try {
         const currentToken = getToken();
         if (!currentToken) {
             message.error("No current token found in localStorage.");
-            return null;
+            return "No token found";
         }
         console.log(currentToken, "currentToken currentToken")
 
@@ -68,12 +68,12 @@ export const refreshToken = async (): Promise<string | null> => {
 
         } else {
             message.error("Failed to refresh token: No token in response.");
-            return null;
+            return "No token in response";
         }
     } catch (error) {
         console.error("Error refreshing token:", error);
         message.error("Error refreshing token. Please log in again.");
-        return null;
+        return "Error refreshing token";
     }
 };
 

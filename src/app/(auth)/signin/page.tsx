@@ -11,8 +11,10 @@ import classes from "../auth.module.css";
 import Content from "@/app/components/AuthContent/content";
 import { BaseURL } from "@/app/constants/index";
 import { useEmail } from "@/app/context/emailContext";
-import { setToken } from "@/utils/auth";
+import { setToken, removeToken, getToken, refreshToken } from "@/utils/auth";
 import axios from "axios";
+import InviteModal from "@/app/modals/invite-user/invite-user";
+import { jwtDecode } from "jwt-decode";
 
 interface SignInFormValues {
   email: string;
@@ -25,51 +27,121 @@ export default function SignIn() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { setEmail } = useEmail();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const handleInviteResponse = async (isAccepted: boolean) => {
+    const inviteResponse = isAccepted ? "true" : "false";
+
+    try {
+      let token = getToken();
+      if (!token) {
+        // token = await refreshToken(); 
+        // console.log("Token refreshed:", token);
+        message.error("Failed to refresh token. Please log in again.");
+        return;
+      }
+
+      const response = await axios.put(
+        `${BaseURL}/enterprise_users`,
+        {
+          inviteResponse: inviteResponse,
+          accountID: 23,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        message.success(isAccepted ? "Invite accepted." : "Invite declined.");
+        if (isAccepted) {
+          router.push("/dashboard");
+        } else {
+          removeToken();
+          router.push("/signin");
+        }
+      } else {
+        message.error("Failed to update invite response.");
+      }
+
+    } catch (error) {
+      message.error("An error occurred while processing the invite response.");
+    }
+  };
+
+
+  const handleAccept = () => handleInviteResponse(true);
+  const handleDecline = () => handleInviteResponse(false);
+
+  const handleCloseModal = () => {
+    localStorage.clear();
+    removeToken();
+    router.push("/signin");
+    setIsModalVisible(false);
+  }
 
   const handleSignIn = async (values: SignInFormValues) => {
     setLoading(true);
     try {
       const response = await axios.post(
         `${BaseURL}/users/login`,
-        {
-          email: values.email,
-          password: values.password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        { email: values.email, password: values.password },
+        { headers: { "Content-Type": "application/json" } }
       );
 
       setLoading(false);
-
       if (response.data.success) {
         const { token, message: successMessage } = response.data.data;
-        message.success(successMessage || "Signin successful.");
         setToken(token);
         setEmail(values.email);
-        router.push("/dashboard");
 
-        console.log("login token:", token);
+        const refreshedToken = await refreshToken();
+        const decodedToken: any = jwtDecode(refreshedToken);
 
+        let isSuperAdminget: any
+        if (decodedToken.plans != null) {
+          isSuperAdminget = decodedToken.plans[0].superAdmin;
+        }
+
+        if (isSuperAdminget == true) {
+          message.success("Welcome Super Admin!");
+          router.push("/dashboard");
+        } else if (decodedToken.plans === null) {
+
+          try {
+            const invite_details = await axios.get(`${BaseURL}/invite_details`, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            const inviteStatus = invite_details.data.data.userInviteStatus;
+
+            if (inviteStatus === "NOT_REGISTERED" || inviteStatus === "PENDING") {
+              message.info("You are invited but not yet registered.");
+              setIsModalVisible(true);
+              return;
+            } else if (inviteStatus === "ACCEPTED") {
+              message.success(successMessage || "Invite accepted.");
+              router.push("/dashboard");
+            } else {
+              message.error("You have already declined the invitation. Please contact the admin.");
+              removeToken();
+              router.push("/signin");
+            }
+          } catch (error) {
+            console.error("Error fetching invite details:", error);
+            message.error("Failed to fetch invite details.");
+            router.push("/signin");
+          }
+        }
       } else {
-        const errorMessage = response.data.error?.message || "Signin failed. Please try again.";
-        message.error(errorMessage);
+        message.error(response.data.error?.message || "Signin failed. Please try again.");
       }
     } catch (error) {
       setLoading(false);
-      if (axios.isAxiosError(error) && error.response) {
-        const { data } = error.response;
-
-        const errorMessage = data.error?.message || "Invalid email or password";
-        message.error(errorMessage);
-      } else {
-        message.error("An error occurred. Please try again.");
-      }
+      message.error("An error occurred while signing in. Please try again.");
     }
   };
-
   const handleGoogleSignIn = () => {
     window.location.href = `${BaseURL}/users/provider-login`;
   };
@@ -139,14 +211,8 @@ export default function SignIn() {
                       name="email"
                       label="E-mail"
                       rules={[
-                        {
-                          type: "email",
-                          message: "The input is not a valid E-mail!",
-                        },
-                        {
-                          required: true,
-                          message: "Please enter your E-mail!",
-                        },
+                        { type: "email", message: "The input is not a valid E-mail!" },
+                        { required: true, message: "Please enter your E-mail!" },
                       ]}
                     >
                       <Input placeholder="Email ID" id="email" />
@@ -157,14 +223,8 @@ export default function SignIn() {
                       name="password"
                       label="Password"
                       rules={[
-                        {
-                          required: true,
-                          message: "Please enter your password!",
-                        },
-                        {
-                          min: 8,
-                          message: "Password must be at least 8 characters",
-                        },
+                        { required: true, message: "Please enter your password!" },
+                        { min: 8, message: "Password must be at least 8 characters" },
                       ]}
                     >
                       <Input.Password placeholder="Password" id="password" />
@@ -199,14 +259,21 @@ export default function SignIn() {
                         Sign up
                       </Link>
                     </Form.Item>
-
                   </Col>
                 </Row>
-
               </Form>
             </div>
           </Col>
         </Row>
+      </div>
+
+      <div className="customModalWrapper">
+        <InviteModal
+          isModalVisible={isModalVisible}
+          onClose={handleCloseModal}
+          onAccept={handleAccept}
+          onDecline={handleDecline}
+        />
       </div>
     </div>
   );
