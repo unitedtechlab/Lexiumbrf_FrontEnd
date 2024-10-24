@@ -3,104 +3,38 @@
 import { useState, useEffect } from "react";
 import { message } from "antd";
 import dashboardStyles from "./dashboard.module.css";
-import CreateModal from "@/app/modals/create-modal/create-modal";
-import { fetchOrdersByUser, createEnterpriseAPI, fetchEnterprisesAPI } from "@/app/API/api";
-import { getAuthHeaders } from "@/utils/auth"; // Use getAuthHeaders to manage tokens
+import { getAuthHeaders } from "@/utils/auth";
 import Link from "next/link";
 import Image from "next/image";
 import welcomeImg from "../../assets/images/dashboard.png";
+import PlanModal from '@/app/modals/plan-modal/planModal';
+import CreateEnterpriseModal from '@/app/modals/create-modal/create-modal'
 
 export default function Dashboard() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPlanModalOpen, setIsPlanModalOpen] = useState(true);
   const [modalLoading, setModalLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchUserOrderDetails = async () => {
-      try {
-        // Get authorization headers (with token management)
-        const headers = await getAuthHeaders();
-
-        if (!headers.Authorization) {
-          throw new Error("No valid token found. Please log in.");
-        }
-
-        // Fetch orders using the token in headers
-        const orderResponse = await fetchOrdersByUser(headers.Authorization);
-
-        if (orderResponse && Array.isArray(orderResponse) && orderResponse.length > 0) {
-          const firstOrder = orderResponse[0];
-
-          if (firstOrder.planID === 3) {
-            // Enterprise plan detected, open modal
-            setIsModalOpen(true);
-          } else {
-            console.log("No enterprise plan detected.");
-          }
-        } else {
-          console.log("No orders found or invalid response.");
-        }
-
-        // Fetch enterprise details
-        const fetchEnterprise = await fetchEnterprisesAPI();
-
-        if (fetchEnterprise?.data && fetchEnterprise.data[0].accountID) {
-          setIsModalOpen(false); // Close modal if enterprise exists
-        }
-      } catch (error) {
-        console.error("Error fetching orders or enterprises:", error);
-        message.error("An error occurred while fetching order details.");
-      }
-    };
-
-    fetchUserOrderDetails();
-  }, []);
-
-  const handleModalSubmit = async (enterpriseName: string) => {
+  const handlePlanModalSubmit = async (selectedPlanId: number) => {
     setModalLoading(true);
     try {
-      // Get authorization headers
       const headers = await getAuthHeaders();
 
       if (!headers.Authorization) {
-        throw new Error("No token found, please login.");
+        message.error("No valid token found. Please log in.");
+        return;
       }
-
-      // Create the enterprise
-      const response = await createEnterpriseAPI(enterpriseName);
-
-      if (response && response.success) {
-        message.success(response.message || "Enterprise created successfully!");
-
-        // Refresh the token after enterprise creation
-        const refreshedHeaders = await getAuthHeaders();
-
-        if (refreshedHeaders.Authorization) {
-          const fetchEnterprise = await fetchEnterprisesAPI();
-
-          if (fetchEnterprise?.data && fetchEnterprise.data.length > 0) {
-            const accountID = fetchEnterprise.data[0].accountID;
-            console.log("Account ID after enterprise creation:", accountID);
-          } else {
-            console.log("No enterprise account found after creation.");
-          }
-        } else {
-          console.error("Failed to refresh token after enterprise creation.");
-        }
-
-        setIsModalOpen(false);
-      } else if (response?.error) {
-        message.error(response.error || "Failed to create enterprise.");
-      }
+      message.success("Plan selected successfully!");
+      setIsPlanModalOpen(false);
     } catch (error) {
-      console.error("Error during enterprise creation or token refresh:", error);
-      message.error("An unexpected error occurred. Please try again.");
+      console.error("Error handling plan submission:", error);
+      message.error("Failed to process the selected plan.");
     } finally {
       setModalLoading(false);
     }
   };
 
-  const handleModalCancel = () => {
-    setIsModalOpen(false);
+  const handlePlanModalCancel = () => {
+    setIsPlanModalOpen(false);
   };
 
   return (
@@ -126,14 +60,14 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {isModalOpen && (
-        <CreateModal
-          open={isModalOpen}
-          title="Create an Enterprise"
-          fieldLabel="Enterprise Name"
-          onSubmit={handleModalSubmit}
-          onCancel={handleModalCancel}
+      {isPlanModalOpen && (
+        <PlanModal
+          open={isPlanModalOpen}
+          title="Choose Your Plan"
+          onSubmit={handlePlanModalSubmit}
+          onCancel={handlePlanModalCancel}
           isLoading={modalLoading}
+          setModalOpen={setIsPlanModalOpen}
         />
       )}
     </>

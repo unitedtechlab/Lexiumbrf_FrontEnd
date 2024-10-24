@@ -36,9 +36,9 @@ const OTPPage: React.FC = () => {
             if (response.status === 200 && response.data.success) {
                 const token = response.data.data.token;
                 if (token) {
-                    message.success(response.data.message || 'OTP verified successfully. Redirecting to Plans...');
+                    message.success(response.data.message || 'OTP verified successfully. Redirecting to Dashboard...');
                     setToken(token);
-                    router.push('/plans');
+                    router.push('/dashboard');
                 } else {
                     message.error('Token is missing in the response. Please try again.');
                     console.error('No token found in the response.');

@@ -1,23 +1,5 @@
-.logoWrapper {
-    padding: 20px 0;
-    margin-bottom: 1.5rem;
-}
-
-.headerWrapper {
-    margin-bottom: 2rem;
-}
-
-.headerWrapper h2 {
-    margin: 0;
-    font-size: var(--h3-font);
-    max-width: 500px;
-    line-height: 1.2;
-}
-
-.headerWrapper p {
-    font-weight: var(--font-weight-600);
-    margin-bottom: 5px;
-    color: var(--tertiary-100);
+.planWrapper {
+    padding: 0 8px;
 }
 
 .planBox {
