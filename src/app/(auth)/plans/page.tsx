@@ -8,7 +8,7 @@ import { fetchPlansAPI } from "@/app/API/api";
 import classes from "./plan.module.css";
 import Image from "next/image";
 import Logo from '@/app/assets/images/logo.png';
-import { getToken, refreshToken } from "@/utils/auth";
+import { getAuthHeaders } from "@/utils/auth";  // Import getAuthHeaders from auth.ts
 import { BaseURL } from '@/app/constants/index';
 
 interface Plan {
@@ -27,6 +27,7 @@ export default function Plans() {
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
+    // Fetch plans when the component is mounted
     useEffect(() => {
         const fetchPlans = async () => {
             setLoading(true);
@@ -45,29 +46,23 @@ export default function Plans() {
         fetchPlans();
     }, []);
 
+    // Handle order creation with proper token management using getAuthHeaders
     const handleOrderCreation = async (planId: number, price: number) => {
-        let token = getToken();
-
-        if (!token) {
-            token = await refreshToken();
-        }
-
-        if (!token) {
-            message.error("You must be logged in to place an order.");
-            router.push("/signin");
-            return;
-        }
-
         try {
+            const headers = await getAuthHeaders(); // Get the auth headers with the token
+
+            if (!headers.Authorization) {
+                message.error("You must be logged in to place an order.");
+                router.push("/signin");
+                return;
+            }
+
             const response = await axios.post(`${BaseURL}/orders`, {
                 planID: planId,
                 amount: price,
                 status: "true",
             }, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                },
+                headers,
             });
 
             if (response.data.success) {
