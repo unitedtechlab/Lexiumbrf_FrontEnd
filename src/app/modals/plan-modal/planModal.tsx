@@ -3,7 +3,7 @@ import { Col, Row, Button, message, Empty, Modal } from "antd";
 import { fetchUserPlan, clearCachedPlan, Plan, fetchOrdersByUser } from "@/utils/planUtils";
 import axios from "axios";
 import { getAuthHeaders } from "@/utils/auth";
-import { BaseURL } from "@/app/constants/index"; // Base API URL
+import { BaseURL } from "@/app/constants/index";
 import classes from "./plan.module.css";
 
 interface PlanModalProps {
@@ -30,18 +30,16 @@ const PlanModal: React.FC<PlanModalProps> = ({ open, title, onSubmit, onCancel, 
                 return;
             }
 
-            // Fetch the orders
-            const orders = await fetchOrdersByUser(headers.Authorization.split(" ")[1]); // Pass the token without 'Bearer'
+            const orders = await fetchOrdersByUser(headers.Authorization.split(" ")[1]);
 
             if (orders && orders.length > 0) {
-                const { planID, status } = orders[0]; // Log the first order details
-                console.log("Fetched Plan ID:", planID);
-                console.log("Fetched Status:", status);
+                const { planID, status } = orders[0];
+                // console.log("Fetched Plan ID:", planID);
+                // console.log("Fetched Status:", status);
 
-                // If status is "success", prevent the modal from opening again
                 if (status === "success") {
-                    setModalOpen(false); // Close the modal
-                    localStorage.setItem("orderStatus", "success"); // Store in localStorage to persist across reloads
+                    setModalOpen(false);
+                    localStorage.setItem("orderStatus", "success");
                 }
             } else {
                 console.log("No orders found.");
@@ -74,7 +72,7 @@ const PlanModal: React.FC<PlanModalProps> = ({ open, title, onSubmit, onCancel, 
         };
 
         fetchPlans();
-        logFetchedOrderDetails(); // Fetch orders and log details when modal opens
+        logFetchedOrderDetails();
 
         return () => {
             if (!open) {
@@ -93,7 +91,6 @@ const PlanModal: React.FC<PlanModalProps> = ({ open, title, onSubmit, onCancel, 
                 return;
             }
 
-            // Step 1: Create the order using the POST /orders API
             const orderResponse = await axios.post(
                 `${BaseURL}/orders`,
                 { planID: planId, amount: price, status: "true" },
@@ -107,7 +104,6 @@ const PlanModal: React.FC<PlanModalProps> = ({ open, title, onSubmit, onCancel, 
                 message.error(orderResponse.data.error.code || "Failed to create order. Please try again.");
             }
 
-            // Fetch and log orders after placing the order
             logFetchedOrderDetails();
         } catch (error) {
             console.error("Order creation error:", error);

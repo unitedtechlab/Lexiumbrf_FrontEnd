@@ -50,7 +50,7 @@ export const refreshToken = async (): Promise<string> => {
             message.error("No current token found in localStorage.");
             return "No token found";
         }
-        console.log(currentToken, "currentToken currentToken")
+        // console.log(currentToken, "currentToken currentToken")
 
         const response = await axios.get(`${BaseURL}/latest_token`, {
             headers: {
@@ -58,12 +58,12 @@ export const refreshToken = async (): Promise<string> => {
                 "Authorization": `Bearer ${currentToken}`,
             },
         });
-        console.log("sadasdasdasdasdasdasdasdsad", response.data.data, "response currentToken")
+        // console.log("sadasdasdasdasdasdasdasdsad", response.data.data, "response currentToken")
 
         if (response.data && response.data.data && response.data.data.token) {
             const newToken = response.data.data.token;
             setToken(newToken);
-            console.log(newToken, "newToken newToken newToken")
+            // console.log(newToken, "newToken newToken newToken")
             return newToken;
 
         } else {

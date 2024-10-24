@@ -34,7 +34,7 @@ function Workspaces() {
     const [loading, setLoading] = useState<boolean>(false);
     const [WorkspaceData, setWorkspaceData] = useState<{ [key: string]: WorkspaceData }>({});
     const [workspaceName, setWorkspaceName] = useState<string>("");
-    const [currentWorkspaceId, setCurrentWorkspaceId] = useState<string >("");
+    const [currentWorkspaceId, setCurrentWorkspaceId] = useState<string>("");
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [entityToDelete, setEntityToDelete] = useState({ name: '', id: '' });
 
@@ -183,7 +183,7 @@ function Workspaces() {
 
     const items: (workspace: WorkspaceData) => MenuProps['items'] = (workspace) => [
         {
-            label: 'User Management',
+            label: "User Management",
             key: 'user_manage',
         },
         {
@@ -276,7 +276,7 @@ function Workspaces() {
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
                 workSpace=""
-                onSave={handleSaveWorkspace} name={'Workspace'} workspaceId={currentWorkspaceId}/>
+                onSave={handleSaveWorkspace} name={'Workspace'} workspaceId={currentWorkspaceId} />
 
             <EditableModal open={isEditModalOpen}
                 title="Edit Workspace"
@@ -297,7 +297,7 @@ function Workspaces() {
             />
             <RoleManagementModal
                 isModalOpen={isRoleModalOpen}
-                onClose={() => setIsRoleModalOpen(false)}  workspaceId={currentWorkspaceId!}              
+                onClose={() => setIsRoleModalOpen(false)} workspaceId={currentWorkspaceId!}
             />
 
         </div>

@@ -1,11 +1,9 @@
 "use client";
 
-import { Button, Divider, Input, Tag, Avatar, List, message, Pagination } from 'antd';
+import { Button, Divider, Input, Tag, message, Pagination } from 'antd';
 import axios from 'axios';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import classes from './user.module.css';
-import Image from "next/image";
-import userImage from "@/app/assets/images/user.png";
 import { BaseURL } from '@/app/constants';
 import { getToken } from '@/utils/auth';
 import { AiOutlinePaperClip } from 'react-icons/ai';
@@ -24,7 +22,6 @@ interface InvitedUser {
 }
 
 const UserSettings: React.FC<UserSettingsModalProps> = ({ }) => {
-    const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
     const [memberInput, setMemberInput] = useState<string>('');
     const [invitedUsers, setInvitedUsers] = useState<InvitedUser[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -32,7 +29,7 @@ const UserSettings: React.FC<UserSettingsModalProps> = ({ }) => {
 
     const startIndex = (currentPage - 1) * pageSize;
     const paginatedUsers = invitedUsers.slice(startIndex, startIndex + pageSize);
- console.log("invitedUsers", invitedUsers)
+    console.log("invitedUsers", invitedUsers)
     const fetchInvitedUsers = async () => {
         try {
             const token = getToken();
@@ -196,6 +193,7 @@ const UserSettings: React.FC<UserSettingsModalProps> = ({ }) => {
                         value={memberInput}
                         onChange={(e) => setMemberInput(e.target.value)}
                         onPressEnter={() => sendInvite(memberInput)}
+                        className='custom-input'
                     />
                 </div>
                 <div className={classes.csvUploadSection}>
@@ -205,7 +203,10 @@ const UserSettings: React.FC<UserSettingsModalProps> = ({ }) => {
                         <input id="csvUpload" type="file" accept=".csv" onChange={handleCSVUpload} className={classes.csvInput} />
                     </label>
                 </div>
-                <Button type="primary" className={`btn btn-outline ${classes.inviteBtn}`} onClick={() => sendInvite(memberInput)}>
+                <Button type="primary" className={`btn btn-sm ${classes.inviteBtn}`}>
+                    <AiOutlinePaperClip fontSize={18} />Copy Sharable Link
+                </Button>
+                <Button type="primary" className={`btn btn-outline btn-sm ${classes.inviteBtn}`} onClick={() => sendInvite(memberInput)}>
                     Invite User
                 </Button>
             </div>

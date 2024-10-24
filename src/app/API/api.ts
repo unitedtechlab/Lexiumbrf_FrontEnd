@@ -28,11 +28,6 @@ const getAuthHeaders = async () => {
 export const fetchEnterprisesAPI = async (): Promise<EnterpriseResponse | null> => {
     try {
         const headers = await getAuthHeaders();
-
-        // if (!headers['Authorization']) {
-        //     throw new Error('No token found, please log in.');
-        // }
-
         const response = await axios.get(`${BaseURL}/enterprises?account-type=Enterprise`, {
             headers,
         });
@@ -81,11 +76,6 @@ export const fetchEnterprisesAPI = async (): Promise<EnterpriseResponse | null> 
 export const createEnterpriseAPI = async (enterpriseName: string): Promise<any> => {
     try {
         const headers = await getAuthHeaders();
-
-        // if (!headers['Authorization']) {
-        //     throw new Error('No token found, please log in.');
-        // }
-
         const response = await axios.post(
             `${BaseURL}/enterprises?account-type=Enterprise`,
             { "EnterpriseName": enterpriseName },
@@ -104,16 +94,11 @@ export const createEnterpriseAPI = async (enterpriseName: string): Promise<any> 
 export const editEnterpriseAPI = async (enterprise: Enterprise): Promise<any> => {
     try {
         const headers = await getAuthHeaders();
-
-        // if (!headers['Authorization']) {
-        //     throw new Error('No token found, please log in.');
-        // }
-
         const response = await axios.put(
             `${BaseURL}/enterprises?account-type=Enterprise`,
             {
                 accountID: enterprise.accountID,
-                enterpriseName: enterprise.accountname,
+                enterpriseName: enterprise.accountName,
             },
             { headers }
         );

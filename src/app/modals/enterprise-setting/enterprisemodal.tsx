@@ -30,13 +30,15 @@ const EnterpriseModal: React.FC<EnterpriseModalProps> = ({ open, title, onSubmit
         }
     }, [open]);
 
+    // Fetch enterprises securely using auth headers
     const fetchEnterprises = async () => {
         setLoading(true);
         try {
-            const data = await fetchEnterprisesAPI();
-            if (data && data.success) {
-                setEnterprises(data.data);
+            const data = await fetchEnterprisesAPI();  // API call to fetch enterprises
+            if (data && data.success && data.data) {
+                setEnterprises(data.data);  // Set enterprises only if data is valid
             } else {
+                setEnterprises([]);  // If data is not valid, set an empty array
                 message.error('Failed to fetch enterprises.');
             }
         } catch (error) {
@@ -49,7 +51,7 @@ const EnterpriseModal: React.FC<EnterpriseModalProps> = ({ open, title, onSubmit
 
     const handleEdit = (record: Enterprise) => {
         setEditingEnterprise(record);
-        setEnterpriseName(record.accountname);
+        setEnterpriseName(record.accountName);  // Adjust field name based on API response
     };
 
     const handleUpdate = async () => {
@@ -58,13 +60,13 @@ const EnterpriseModal: React.FC<EnterpriseModalProps> = ({ open, title, onSubmit
         try {
             const updatedEnterprise = {
                 ...editingEnterprise,
-                accountname: enterpriseName,
+                accountName: enterpriseName,  // Adjust field name based on API
             };
 
             const response = await editEnterpriseAPI(updatedEnterprise);
             if (response && response.success) {
                 message.success(`Enterprise "${enterpriseName}" updated successfully!`);
-                fetchEnterprises();
+                fetchEnterprises();  // Refresh the enterprise list
                 setEditingEnterprise(null);
                 setEnterpriseName("");
             } else {
@@ -82,9 +84,9 @@ const EnterpriseModal: React.FC<EnterpriseModalProps> = ({ open, title, onSubmit
 
     const columns = [
         {
-            title: 'Enterprise Name',
-            dataIndex: 'accountname',
-            key: 'accountname',
+            title: 'Enterprise Name',  // This is the name shown in the table header
+            dataIndex: 'accountName',  // Adjust field name based on API response
+            key: 'accountName',  // This should match the field from the API response
         },
         {
             title: 'Created At',

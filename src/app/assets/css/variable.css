@@ -44,7 +44,7 @@
 
   --base-font: clamp(14px, 0.833vw, 16px);
   --font-xs: clamp(13px, 0.729vw, 14px);
-  --font-sm: clamp(16px, 0.938vw, 18px);
+  --font-sm: clamp(15px, 0.938vw, 17px);
 
   --font-weight-100: 100;
   --font-weight-200: 200;

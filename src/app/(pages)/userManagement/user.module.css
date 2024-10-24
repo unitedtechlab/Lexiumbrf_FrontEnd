@@ -11,7 +11,7 @@
     justify-content: space-between;
 }
 
-.upgradeButton {
+/* .upgradeButton {
     padding: 12px 20px;
     border: 1px solid #487DE7;
     border-radius: 4px;
@@ -25,27 +25,15 @@
     color: var(--white-color) !important;
 }
 
+*/
 .inviteInputSection {
     justify-content: space-between;
     flex-wrap: nowrap;
 }
 
 .selectField {
-    width: 50%;
-}
-
-.selectCustom.ant-input-outlined:hover {
-    border-color: var(--primary-100) !important;
-    background-color: #ffffff;
-}
-
-.options {
-    justify-content: space-between;
-}
-
-.selectlist h6 {
-    margin: 0;
-    font-size: var(--font-xs);
+    width: 100%;
+    max-width: 50%;
 }
 
 .revokeButton {
@@ -57,13 +45,18 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 5px;
-    border: 1px solid var(--tertiary-600);
-    border-radius: 4px;
+    padding: 10px;
+    border-radius: 12px;
     background-color: var(--white-color);
     position: relative;
     cursor: pointer;
-    width: 40%;
+    width: 100%;
+    border: 1px solid var(--tertiary-300);
+    transition: all 0.25s linear;
+}
+
+.csvUploadSection:hover {
+    border-color: var(--primary-100);
 }
 
 .csvLabel {
@@ -73,6 +66,7 @@
     font-size: 14px;
     color: #333;
     pointer-events: auto;
+    transition: all 0.25s linear;
 }
 
 .csvLabel:hover {
@@ -88,11 +82,6 @@
     opacity: 0;
     cursor: pointer;
     z-index: 1;
-}
-
-.csvUploadSection:hover {
-    border-color: var(--primary-100);
-    /* background-color: var(--tertiary-500); */
 }
 
 .attachmentIcon {

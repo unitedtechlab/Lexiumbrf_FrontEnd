@@ -32,9 +32,6 @@ export const fetchUserPlan = async (): Promise<Plan[] | null> => {
         const response = await axios.get(`${BaseURL}/plans`, {
             headers,
         });
-
-        // console.log("API response:", response.data);
-
         if (response.data.success && response.data.data && response.data.data.plans) {
             cachedPlans = response.data.data.plans;
             return cachedPlans;

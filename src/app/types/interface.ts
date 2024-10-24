@@ -15,7 +15,7 @@ export interface UserContextType {
 // Define the structure of the enterprise data response
 export interface Enterprise {
   accountID: number;
-  accountname: string;
+  accountName: string;
   createdAt: string;
   updatedAt: string;
 }
