@@ -51,8 +51,8 @@ const ProfileSettings: React.FC<ProfileSettingsModalProps> = ({ visible, onClose
             const response = await axios.post(
                 `${BaseURL}/users/update-name`,
                 {
-                    first_name: values.firstName,
-                    last_name: values.lastName,
+                    FirstName: values.firstName,
+                    LastName: values.lastName,
                 },
                 {
                     headers: {
@@ -64,6 +64,8 @@ const ProfileSettings: React.FC<ProfileSettingsModalProps> = ({ visible, onClose
             setLoading(false);
             if (response.status === 200) {
                 message.success(response.data.message || "Name updated successfully.");
+
+                console.log(response.data, "token profile")
                 onClose();
             } else {
                 message.error(response.data.error || "Failed to update name. Please try again.");
