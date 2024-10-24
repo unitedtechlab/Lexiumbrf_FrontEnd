@@ -199,8 +199,10 @@ export default function SignIn() {
                         Sign up
                       </Link>
                     </Form.Item>
+
                   </Col>
                 </Row>
+
               </Form>
             </div>
           </Col>
