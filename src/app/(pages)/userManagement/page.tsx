@@ -169,6 +169,35 @@ const UserSettings: React.FC<UserSettingsModalProps> = ({ }) => {
             console.error('Error editing user:', error);
         }
     };
+    const handleCopySharableLink = async () => {
+        try {
+            const token = getToken();
+            if (!token) {
+                throw new Error('No token found, please login.');
+            }
+            const response = await axios.post(
+                `${BaseURL}/accounts/create-invite`,
+                { account_id: 23 }, 
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`,
+                    },
+                }
+            );
+
+            const inviteLink = response.data?.data?.invite_link;
+            if (inviteLink) {
+                navigator.clipboard.writeText(inviteLink);
+                message.success('Sharable link copied to clipboard!');
+            } else {
+                message.error('Failed to retrieve invite link.');
+            }
+        } catch (error) {
+            console.error('Error generating invite link:', error);
+            message.error('Failed to generate invite link.');
+        }
+    };
 
     return (
         <div className={classes.userSettingModal}>
@@ -203,7 +232,7 @@ const UserSettings: React.FC<UserSettingsModalProps> = ({ }) => {
                         <input id="csvUpload" type="file" accept=".csv" onChange={handleCSVUpload} className={classes.csvInput} />
                     </label>
                 </div>
-                <Button type="primary" className={`btn btn-sm ${classes.inviteBtn}`}>
+                <Button type="primary" className={`btn btn-sm ${classes.inviteBtn}`} onClick={handleCopySharableLink}>
                     <AiOutlinePaperClip fontSize={18} />Copy Sharable Link
                 </Button>
                 <Button type="primary" className={`btn btn-outline btn-sm ${classes.inviteBtn}`} onClick={() => sendInvite(memberInput)}>
